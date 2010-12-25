@@ -91,6 +91,11 @@ describe TitleParser do
     title.should == {}
   end
 
+  it "skips ultimate collections" do
+    title = TitleParser.parse("Black N Blue - Ultimate Collection")
+    title.should == {}
+  end
+
   it "skips soundtracks" do
     title = TitleParser.parse("Assassin's Creed: Brotherhood - Soundtrack")
     title.should == {}

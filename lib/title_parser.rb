@@ -23,6 +23,7 @@ class TitleParser
     return {} if artist.include?("collection")
     return {} if album.include?("soundtrack")
     return {} if album.include?("discography")
+    return {} if album.include?("ultimate collection")
 
     { :artist => artist.titleize, :album => album.titleize }
   end
