@@ -4,7 +4,10 @@
   </h3>
 
   <div class="torrentDetails">
-    <p>Published at <%= torrent.published_at %>, fetched <%= torrent.created_at %></p>
+    <p>
+      Published <%= time_ago_in_words(torrent.published_at) %>,
+      fetched <%= time_ago_in_words(torrent.created_at) %> ago.
+    </p>
 
     <p>
       <%= link_to("source", torrent.guid) %> |
