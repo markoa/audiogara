@@ -1,4 +1,9 @@
 Audiogara::Application.routes.draw do
+
+  resources :torrents, :only => [:index, :show]
+
+  root :to => "torrents#index"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

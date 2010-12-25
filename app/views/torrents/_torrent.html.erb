@@ -1,0 +1,14 @@
+<li>
+  <h3>
+    <%= torrent.artist_name.titleize %> - <%= torrent.album_name.titleize %>
+  </h3>
+
+  <div class="torrentDetails">
+    <p>Published at <%= torrent.published_at %>, fetched <%= torrent.created_at %></p>
+
+    <p>
+      <%= link_to("source", torrent.guid) %> |
+      <%= link_to("torrent", torrent.link) %>
+    </p>
+  </div>
+</li>
