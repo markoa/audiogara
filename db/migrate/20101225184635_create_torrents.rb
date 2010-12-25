@@ -4,7 +4,7 @@ class CreateTorrents < ActiveRecord::Migration
       t.string :title
       t.string :guid
       t.string :link
-      t.time :published_at
+      t.datetime :published_at
       t.string :artist_name
       t.string :album_name
 

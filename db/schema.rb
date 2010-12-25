@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(:version => 20101225184635) do
     t.string   "title"
     t.string   "guid"
     t.string   "link"
-    t.time     "published_at"
+    t.datetime "published_at"
     t.string   "artist_name"
     t.string   "album_name"
     t.datetime "created_at"
