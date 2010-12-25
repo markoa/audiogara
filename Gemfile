@@ -5,4 +5,8 @@ gem 'mysql2'
 
 group :development, :test do
   gem 'ruby-debug'
+  gem 'rspec-rails'
+  gem 'shoulda'
+  gem 'factory_girl_rails'
+  gem 'autotest'
 end
