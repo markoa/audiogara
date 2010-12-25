@@ -1,0 +1,11 @@
+h1. Audiogara
+
+You give it your Last.fm username, it recommends you music torrents.
+
+h2. Setup
+
+<pre><code>bundle install [--path vendor/bundle]</code></pre>
+
+h2. License
+
+Audiogara is licensed under the MIT License.
