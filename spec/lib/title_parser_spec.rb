@@ -82,8 +82,11 @@ describe TitleParser do
     title = TitleParser.parse("VA - Now that's what I call music")
     title.should == {}
 
-    va_title = TitleParser.parse("Various Artists - Now that's what I call music")
-    va_title.should == {}
+    title = TitleParser.parse("Various Artists - Now that's what I call music")
+    title.should == {}
+
+    title = TitleParser.parse("Va Absolute Soul 3cd 320kbit Mp3 - Oeric")
+    title.should == {}
   end
 
   it "skips collections" do
@@ -103,6 +106,11 @@ describe TitleParser do
 
   it "skips discographies" do
     title = TitleParser.parse("Jefferson Airplane - Discography")
+    title.should == {}
+  end
+
+  it "skips hits of decades" do
+    title = TitleParser.parse("Eternal 70s Hits - Pure Gold")
     title.should == {}
   end
 

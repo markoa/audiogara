@@ -20,8 +20,10 @@ class TitleParser
 
     return {} if artist.size == 0 or album.size == 0
     return {} if ["va", "various artists"].include?(artist)
+    return {} if artist.match(/^va\s/)
     return {} if artist.include?("collection")
-    return {} if album.include?("soundtrack")
+    return {} if artist.match(/\d\ds hits/)
+    return {} if album.include?("soundtrack") or album == "ost"
     return {} if album.include?("discography")
     return {} if album.include?("ultimate collection")
 
