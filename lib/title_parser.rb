@@ -23,10 +23,15 @@ class TitleParser
     return {} if artist.match(/^va\s/)
     return {} if artist.include?("collection")
     return {} if artist.match(/\d\ds hits/)
-    return {} if album.include?("soundtrack") or album == "ost"
+    return {} if artist.include?("best of")
+    return {} if artist.include?("discography")
     return {} if album.include?("discography")
+    return {} if album.include?("soundtrack") or album == "ost"
     return {} if album.include?("ultimate collection")
+    return {} if album.include?("definitive collection")
     return {} if album.include?("double cd")
+    return {} if album.match(/ipod|ipad|iphone/)
+    return {} if album.include?("cd set")
     return {} if album == "mp3"
 
     { :artist => artist.titleize, :album => album.titleize }

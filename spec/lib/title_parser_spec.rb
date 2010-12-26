@@ -75,53 +75,76 @@ describe TitleParser do
 
   it "skips 'The best Of Pantera CD'" do
     title = TitleParser.parse("The best Of Pantera CD")
-    title.should == {}
+    title.should be_blank
   end
 
   it "skips Various Artists" do
     title = TitleParser.parse("VA - Now that's what I call music")
-    title.should == {}
+    title.should be_blank
 
     title = TitleParser.parse("Various Artists - Now that's what I call music")
-    title.should == {}
+    title.should be_blank
 
     title = TitleParser.parse("Va Absolute Soul 3cd 320kbit Mp3 - Oeric")
-    title.should == {}
+    title.should be_blank
   end
 
   it "skips collections" do
     title = TitleParser.parse("MC Stevie Hyper D MP3 Collection - Lounge MP3]")
-    title.should == {}
+    title.should be_blank
   end
 
   it "skips ultimate collections" do
     title = TitleParser.parse("Black N Blue - Ultimate Collection")
-    title.should == {}
+    title.should be_blank
+  end
+
+  it "skips definitive collections" do
+    title = TitleParser.parse("Greatest Ever Number 1s - The Definitive Collection")
+    title.should be_blank
   end
 
   it "skips soundtracks" do
     title = TitleParser.parse("Assassin's Creed: Brotherhood - Soundtrack")
-    title.should == {}
+    title.should be_blank
   end
 
   it "skips discographies" do
     title = TitleParser.parse("Jefferson Airplane - Discography")
-    title.should == {}
+    title.should be_blank
+
+    title = TitleParser.parse("Jefferson Airplane Discography - Something For All The Hippies")
+    title.should be_blank
   end
 
   it "skips hits of decades" do
     title = TitleParser.parse("Eternal 70s Hits - Pure Gold")
-    title.should == {}
+    title.should be_blank
   end
 
   it "skips double cds" do
     title = TitleParser.parse("80's Wave - Entertainment Weekly Double Cd")
-    title.should == {}
+    title.should be_blank
+  end
+
+  it "skips cd sets" do
+    title = TitleParser.parse("Elvis - 2cd Set")
+    title.should be_blank
   end
 
   it "skips albums titled 'mp3'" do
     title = TitleParser.parse("Kis Hudh Tak - Mp3")
-    title.should == {}
+    title.should be_blank
+  end
+
+  it "skips best ofs" do
+    title = TitleParser.parse("Best of Elvis - The Golden Ages")
+    title.should be_blank
+  end
+
+  it "skips spam" do
+    title = TitleParser.parse("Lil Wayne Im Not A Human Being M4a He - Aac Vbr Ipod Ipad Iphone")
+    title.should be_blank
   end
 
 end
