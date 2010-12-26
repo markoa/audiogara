@@ -13,34 +13,38 @@ describe Torrent do
 
   it { should validate_uniqueness_of(:guid) }
 
-  it "should create from hash made from a parsed feed item" do
-    hash = {
-      :title => "Dr Dre - Krush",
-      :guid => "http://thepiratebay.org/torrent/5961947/",
-      :link => "http://thepiratebay.org/torrent/5961947/Dr_Dre_-_Krush.torrent",
-      :published_at => "Wed, 17 Nov 2010 08:11:31 +0100"
-    }
+  describe ".create_from_hash" do
 
-    expect { Torrent.create_from_hash(hash) }.to change(Torrent, :count).by(1)
+    it "creates a new record from a parsed feed item" do
+      hash = {
+        :title => "Dr Dre - Krush",
+        :guid => "http://thepiratebay.org/torrent/5961947/",
+        :link => "http://thepiratebay.org/torrent/5961947/Dr_Dre_-_Krush.torrent",
+        :published_at => "Wed, 17 Nov 2010 08:11:31 +0100"
+      }
 
-    torrent = Torrent.last
-    torrent.title.should == "Dr Dre - Krush"
-    torrent.guid.should == "http://thepiratebay.org/torrent/5961947/"
-    torrent.link.should == "http://thepiratebay.org/torrent/5961947/Dr_Dre_-_Krush.torrent"
-    torrent.published_at.should == Time.parse("Wed, 17 Nov 2010 08:11:31 +0100")
-    torrent.artist_name.should == "Dr Dre"
-    torrent.album_name.should == "Krush"
-  end
+      expect { Torrent.create_from_hash(hash) }.to change(Torrent, :count).by(1)
 
-  it "should not create from hash if it's missing valid artist or album info" do
-    hash = {
-      :title => "Dr Dre Discography",
-      :guid => "http://thepiratebay.org/torrent/5961945/",
-      :link => "http://thepiratebay.org/torrent/5961945/Dr_Dre_Discography.torrent",
-      :published_at => "Wed, 17 Nov 2010 10:11:31 +0100"
-    }
+      torrent = Torrent.last
+      torrent.title.should == "Dr Dre - Krush"
+      torrent.guid.should == "http://thepiratebay.org/torrent/5961947/"
+      torrent.link.should == "http://thepiratebay.org/torrent/5961947/Dr_Dre_-_Krush.torrent"
+      torrent.published_at.should == Time.parse("Wed, 17 Nov 2010 08:11:31 +0100")
+      torrent.artist_name.should == "Dr Dre"
+      torrent.album_name.should == "Krush"
+    end
 
-    proc { Torrent.create_from_hash(hash) }.should_not change(Torrent, :count)
+    it "doesn't create a new record if hash is missing valid artist or album info" do
+      hash = {
+        :title => "Dr Dre Discography",
+        :guid => "http://thepiratebay.org/torrent/5961945/",
+        :link => "http://thepiratebay.org/torrent/5961945/Dr_Dre_Discography.torrent",
+        :published_at => "Wed, 17 Nov 2010 10:11:31 +0100"
+      }
+
+      proc { Torrent.create_from_hash(hash) }.should_not change(Torrent, :count)
+    end
+
   end
 
 end
