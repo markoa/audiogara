@@ -2,6 +2,8 @@ require 'title_parser'
 
 class Torrent < ActiveRecord::Base
 
+  belongs_to :artist
+
   validates_presence_of :title, :guid, :link, :published_at
   validates_uniqueness_of :guid
 
