@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'last_fm'
 
 describe Torrent do
 
@@ -74,6 +75,52 @@ describe Torrent do
       Torrent.with_unprocessed_artist.should include @torrent_with_unprocessed_artist
       Torrent.with_unprocessed_artist.should_not include @torrent_with_processed_artist
     end
+  end
+
+  describe ".process_artists" do
+
+    before(:each) do
+      DatabaseCleaner.clean
+
+      @last_fm_artist_fetcher = double("LastFm::Artist")
+      @last_fm_artist_fetcher.stub(:get_info).and_return(
+        {
+          :mbid=>"",
+          :image_small=>"http://userserve-ak.last.fm/serve/34/47091815.jpg",
+          :image_medium=>"http://userserve-ak.last.fm/serve/64/47091815.jpg",
+          :url=>"http://www.last.fm/music/CEO",
+          :image_large=>"http://userserve-ak.last.fm/serve/126/47091815.jpg",
+          :image_extralarge=>"http://userserve-ak.last.fm/serve/252/47091815.jpg",
+          :name=>"CEO",
+          :image_mega=>"http://userserve-ak.last.fm/serve/500/47091815/CEO+video2.jpg"
+        }
+      )
+
+      @torrent_with_unprocessed_artist =
+        Factory(:torrent,
+                :title => "CEO - White Magic",
+                :artist_name => "CEO",
+                :album_name => "White Magic",
+                :artist_id => nil,
+                :artist_processed_at => nil)
+
+      @torrent_with_processed_artist =
+        Factory(:torrent, :artist_processed_at => 5.minutes.ago)
+    end
+
+    it "gets artist info from Last.fm for all torrents that have not been processed yet" do
+      expect { Torrent.process_artists(@last_fm_artist_fetcher) }.to change(Artist, :count).by(1)
+
+      t = @torrent_with_unprocessed_artist.reload
+      t.artist.should_not be_nil
+      t.artist.name.should == "CEO"
+
+      t.artist_processed_at.should_not be_nil
+      t.artist_processed_at.should > 2.seconds.ago
+
+      @torrent_with_processed_artist.reload.artist_processed_at.should <= 5.minutes.ago
+    end
+
   end
 
 end

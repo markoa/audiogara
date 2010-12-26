@@ -1,4 +1,5 @@
 require 'title_parser'
+require 'last_fm'
 
 class Torrent < ActiveRecord::Base
 
@@ -22,4 +23,25 @@ class Torrent < ActiveRecord::Base
            :artist_name => artist_and_album[:artist],
            :album_name => artist_and_album[:album])
   end
+
+  # +fetcher+ is used in test env only
+  #
+  def self.process_artists(fetcher = nil)
+    fetcher ||= LastFm::Artist
+
+    with_unprocessed_artist.each do |torrent|
+
+      artist = Artist.find_by_name(torrent.artist_name)
+
+      if artist.nil?
+        hash = fetcher.get_info(torrent.artist_name)
+        artist = Artist.create_from_hash(hash)
+      end
+
+      torrent.artist = artist
+      torrent.artist_processed_at = Time.now
+      torrent.save
+    end
+  end
+
 end

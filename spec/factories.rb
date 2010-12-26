@@ -10,5 +10,7 @@ Factory.define(:torrent) do |t|
   t.sequence(:guid) { |i| "http://thepiratebay.org/torrent/#{i}" }
   t.link "http://torrents.thepiratebay.org/5449179/MGMT_-_Congratulations.5449179.TPB.torrent"
   t.published_at 2.days.ago
+  t.artist_name "MGMT"
+  t.album_name "Congratulations"
   t.association :artist
 end
