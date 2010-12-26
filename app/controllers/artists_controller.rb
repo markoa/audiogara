@@ -13,6 +13,6 @@ class ArtistsController < ApplicationController
 
   def show
     @artist = Artist.find(params[:id], :include => :torrents)
-    @similar_artists = @artist.similar_artists.known
+    @similar_artists = @artist.similar_artists.known(:order => "score DESC")
   end
 end

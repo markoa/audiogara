@@ -24,15 +24,19 @@
 
       <li>
         and <%= other_similar_artists_link(@artist, @similar_artists) %>
-        that we don't know any torrents for yet.
+        but we don't know about any torrents for them yet.
       </li>
 
     <% else -%>
       <li>
         There are <%= other_similar_artists_link(@artist) %>
-        similar to <%= @artist.name %> that all unfortunately don't have a torrent.
+        similar to <%= @artist.name %> that we're eagerly waiting for to appear in a torrent.
       </li>
     <% end -%>
   </ul>
 
+</div>
+
+<div class="source">
+  Source: <%= link_to("Last.fm", @artist.lastfm_url, :target => "_new") %>
 </div>

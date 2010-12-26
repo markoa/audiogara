@@ -1,0 +1,12 @@
+<h2>Artists similar to <%= link_to @artist.name, @artist %></h2>
+<h3>Sorted by relevance</h3>
+
+<ul>
+  <% @similar_artists.each do |sa| -%>
+    <% if sa.artist_id.present? -%>
+      <li><%= link_to(sa.name, sa.artist) %></li>
+    <% else -%>
+      <li><%= sa.name %></li>
+    <% end -%>
+  <% end -%>
+</ul>
