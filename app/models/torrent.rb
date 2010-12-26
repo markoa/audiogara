@@ -7,6 +7,8 @@ class Torrent < ActiveRecord::Base
   validates_presence_of :title, :guid, :link, :published_at
   validates_uniqueness_of :guid
 
+  scope :with_known_artist, :conditions => "artist_id is not null"
+
   def self.create_from_hash(hash)
     artist_and_album = TitleParser.parse(hash[:title])
     return nil if artist_and_album.empty?

@@ -47,4 +47,17 @@ describe Torrent do
 
   end
 
+  describe "#with_known_artist" do
+
+    before do
+      @torrent = Factory(:torrent, :artist => Factory(:artist))
+      @torrent_with_unknown_artist = Factory(:torrent, :artist_id => nil)
+    end
+
+    it "returns torrents which reference an Artist" do
+      Torrent.with_known_artist.should include @torrent
+      Torrent.with_known_artist.should_not include @torrent_with_unknown_artist
+    end
+  end
+
 end
