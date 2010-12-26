@@ -60,4 +60,20 @@ describe Torrent do
     end
   end
 
+  describe "#with_unprocessed_artist" do
+
+    before do
+      @torrent_with_unprocessed_artist =
+        Factory(:torrent, :artist_id => nil, :artist_processed_at => nil)
+
+      @torrent_with_processed_artist =
+        Factory(:torrent, :artist_processed_at => 5.minutes.ago)
+    end
+
+    it "returns torrents with nil artist_processed_at timestamp" do
+      Torrent.with_unprocessed_artist.should include @torrent_with_unprocessed_artist
+      Torrent.with_unprocessed_artist.should_not include @torrent_with_processed_artist
+    end
+  end
+
 end
