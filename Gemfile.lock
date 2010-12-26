@@ -36,6 +36,7 @@ GEM
     cgi_multipart_eof_fix (2.5.0)
     columnize (0.3.2)
     daemons (1.1.0)
+    database_cleaner (0.6.0)
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -111,6 +112,7 @@ PLATFORMS
 
 DEPENDENCIES
   autotest
+  database_cleaner
   factory_girl_rails
   mongrel
   mysql2

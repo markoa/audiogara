@@ -13,4 +13,5 @@ group :development, :test do
   gem 'shoulda'
   gem 'factory_girl_rails'
   gem 'autotest'
+  gem 'database_cleaner'
 end
