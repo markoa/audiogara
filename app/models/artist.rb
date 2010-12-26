@@ -1,3 +1,5 @@
+require 'last_fm'
+
 class Artist < ActiveRecord::Base
 
   has_many :torrents
@@ -22,6 +24,38 @@ class Artist < ActiveRecord::Base
            :image_large_url => hash[:image_large],
            :image_extralarge_url => hash[:image_extralarge],
            :image_mega_url => hash[:image_mega])
+  end
+
+  # +sims+ is an array of hashes as returned by LastFm::Artist.get_similar.
+  #
+  def update_similar_artists(sims)
+    sims.each do |hash|
+      sim = self.similar_artists.where(:name => hash[:name]).first
+
+      if sim.present?
+        sim.update_attributes(
+          :score => hash[:score],
+          :mbid => hash[:mbid]
+        )
+      else
+        self.similar_artists.create(
+          :name => hash[:name],
+          :score => hash[:score],
+          :mbid => hash[:mbid]
+        )
+      end
+    end
+
+    update_attribute(:similars_processed_at, Time.now)
+  end
+
+  # the job
+  #
+  def self.fetch_similars
+    Artist.need_update_of_similar_artists.each do |artist|
+      sims = LastFm::Artist.get_similar(artist.name)
+      artist.update_similars(sims)
+    end
   end
 
 end

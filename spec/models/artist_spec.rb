@@ -71,4 +71,28 @@ describe Artist do
     end
   end
 
+  describe "#update_similar_artists" do
+
+    before do
+      @mgmt = Factory(:artist, :similars_processed_at => 40.days.ago)
+      @mgmt.similar_artists.create(:score => 1, :name => "Vampire Weekend")
+
+      @sims = [
+        { :name => "Vampire Weekend", :score => 0.9, :mbid => "433" },
+        { :name => "Coldplay", :score => 0.1, :mbid => "123" }
+      ]
+    end
+
+    it "refreshes and creates new similar artists using the results from Last.fm" do
+      expect {
+        @mgmt.update_similar_artists(@sims)
+      }.to change(@mgmt.similar_artists, :count).by(1)
+
+      @mgmt.similar_artists.find_by_name("Vampire Weekend").score.should == 0.9
+      @mgmt.similar_artists.find_by_name("Coldplay").score.should == 0.1
+
+      @mgmt.similars_processed_at.should >= 2.seconds.ago
+    end
+  end
+
 end
