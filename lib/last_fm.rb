@@ -41,10 +41,13 @@ module LastFm
 
       content.split("\n").each do |line|
         parts = line.split(',')
+        name = parts.third
+        name = CGI.unescapeHTML(name) unless name.blank?
+
         res << {
           :score => parts.first.to_f,
           :mbid => parts.second,
-          :name => CGI.unescapeHTML(parts.third)
+          :name => name
         }
       end
 
