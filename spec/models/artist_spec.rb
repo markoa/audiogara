@@ -7,6 +7,8 @@ describe Artist do
 
   it { should have_many(:torrents) }
 
+  it { should have_many(:similar_artists) }
+
   describe ".create_from_hash" do
     
     before do

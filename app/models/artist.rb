@@ -2,6 +2,8 @@ class Artist < ActiveRecord::Base
 
   has_many :torrents
 
+  has_many :similar_artists, :foreign_key => "parent_artist_id"
+
   validates_presence_of :name
   validates_presence_of :lastfm_url
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101226112828) do
+ActiveRecord::Schema.define(:version => 20101226125539) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -21,6 +21,16 @@ ActiveRecord::Schema.define(:version => 20101226112828) do
     t.string   "image_large_url"
     t.string   "image_extralarge_url"
     t.string   "image_mega_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "similar_artists", :force => true do |t|
+    t.string   "name"
+    t.string   "mbid"
+    t.float    "score"
+    t.integer  "artist_id"
+    t.integer  "parent_artist_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
