@@ -34,7 +34,7 @@ class TitleParser
     return {} if album.include?("cd set")
     return {} if album == "mp3"
 
-    { :artist => artist.titleize, :album => album.titleize }
+    { :artist => CGI.unescapeHTML(artist).titleize, :album => CGI.unescapeHTML(album).titleize }
   end
 
   protected

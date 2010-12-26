@@ -3,6 +3,12 @@ require 'title_parser'
 
 describe TitleParser do
 
+  it "unescapes HTML" do
+    title = TitleParser.parse("Mamas &amp; Papas - Hip &amp; hop")
+    title[:artist].should == "Mamas & Papas"
+    title[:album].should == "Hip & Hop"
+  end
+
   it "knows 'The Beatles - Revolver'" do
     title = TitleParser.parse("The Beatles - Revolver")
 

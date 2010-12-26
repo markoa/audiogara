@@ -44,7 +44,7 @@ module LastFm
         res << {
           :score => parts.first.to_f,
           :mbid => parts.second,
-          :name => parts.third
+          :name => CGI.unescapeHTML(parts.third)
         }
       end
 
