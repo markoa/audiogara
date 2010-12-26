@@ -1,6 +1,11 @@
 <li>
   <h3>
-    <%= torrent.artist_name.titleize %> - <%= torrent.album_name.titleize %>
+    <% if torrent.artist.present? -%>
+      <%= link_to(torrent.artist.name, torrent.artist.lastfm_url) %>
+    <% else -%>
+      <%= torrent.artist_name.titleize %>
+    <% end -%>
+    - <%= torrent.album_name.titleize %>
   </h3>
 
   <div class="torrentDetails">
