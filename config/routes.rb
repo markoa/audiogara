@@ -1,5 +1,9 @@
 Audiogara::Application.routes.draw do
 
+  resources :artists, :only => [:index, :show] do
+    resources :similar_artists, :only => [:index, :show]
+  end
+
   resources :torrents, :only => [:index, :show] do
     collection do
       get "all"

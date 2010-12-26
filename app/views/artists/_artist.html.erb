@@ -1,0 +1,11 @@
+<li>
+  <h3>
+    <%= link_to(artist.name, artist) %>
+  </h3>
+
+  <div class="artistDetails">
+    <p>
+      <%= pluralize(artist.torrents.count, "torrent") %>.
+    </p>
+  </div>
+</li>

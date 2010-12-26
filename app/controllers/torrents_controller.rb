@@ -5,7 +5,6 @@ class TorrentsController < ApplicationController
 
     @torrents = Torrent.with_known_artist.paginate(
       :page => page,
-      :per_page => 50,
       :order => "created_at DESC"
     )
   end
@@ -15,7 +14,6 @@ class TorrentsController < ApplicationController
 
     @torrents = Torrent.paginate(
       :page => page,
-      :per_page => 50,
       :order => "created_at DESC"
     )
   end

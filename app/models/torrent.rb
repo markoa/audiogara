@@ -12,6 +12,9 @@ class Torrent < ActiveRecord::Base
 
   scope :with_unprocessed_artist, :conditions => "artist_processed_at is null"
 
+  cattr_reader :per_page
+  @@per_page = 50
+
   def self.create_from_hash(hash)
     artist_and_album = TitleParser.parse(hash[:title])
     return nil if artist_and_album.empty?

@@ -1,0 +1,17 @@
+<li>
+  <h3>
+    <%= torrent.album_name.titleize %>
+  </h3>
+
+  <div class="torrentDetails">
+    <p>
+      Published <%= time_ago_in_words(torrent.published_at) %>,
+      fetched <%= time_ago_in_words(torrent.created_at) %> ago.
+    </p>
+
+    <p>
+      <%= link_to("source", torrent.guid) %> |
+      <%= link_to("torrent", torrent.link) %>
+    </p>
+  </div>
+</li>

@@ -1,0 +1,38 @@
+<h2><%= @artist.name %></h2>
+
+<div class="megaImage">
+  <%= image_tag(@artist.image_mega_url) %>
+</div>
+
+<h3>Torrents</h3>
+
+<div class="torrents">
+  <ul>
+    <%= render(:partial => "torrent", :collection => @artist.torrents) %>
+  </ul>
+</div>
+
+<div class="similarArtists">
+  <h3>Similar artists</h3>
+
+  <ul>
+    <% if @similar_artists.present? -%>
+
+      <% @similar_artists.each do |sa| -%>
+        <li><%= link_to(sa.name, sa.artist) %></li>
+      <% end -%>
+
+      <li>
+        and <%= other_similar_artists_link(@artist, @similar_artists) %>
+        that we don't know any torrents for yet.
+      </li>
+
+    <% else -%>
+      <li>
+        There are <%= other_similar_artists_link(@artist) %>
+        similar to <%= @artist.name %> that all unfortunately don't have a torrent.
+      </li>
+    <% end -%>
+  </ul>
+
+</div>

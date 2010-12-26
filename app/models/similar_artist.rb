@@ -7,6 +7,8 @@ class SimilarArtist < ActiveRecord::Base
 
   validates_presence_of :name, :score
 
+  scope :known, :conditions => "artist_id is not null"
+
   def self.link_with_known_artists
     find_each(:conditions => "artist_id is null") do |sa|
       artist = Artist.find_by_name(sa.name)

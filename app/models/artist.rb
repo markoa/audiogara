@@ -13,6 +13,9 @@ class Artist < ActiveRecord::Base
     where(["similars_processed_at is null or similars_processed_at <= ?", 1.month.ago])
   }
 
+  cattr_reader :per_page
+  @@per_page = 50
+
   def self.create_from_hash(hash)
     return nil if hash.empty?
 
