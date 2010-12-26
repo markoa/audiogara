@@ -7,4 +7,11 @@ class SimilarArtist < ActiveRecord::Base
 
   validates_presence_of :name, :score
 
+  def self.link_with_known_artists
+    find_each(:conditions => "artist_id is null") do |sa|
+      artist = Artist.find_by_name(sa.name)
+      sa.update_attribute(:artist_id, artist.id) if artist.present?
+    end
+  end
+
 end

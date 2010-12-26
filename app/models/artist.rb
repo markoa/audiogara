@@ -51,10 +51,10 @@ class Artist < ActiveRecord::Base
 
   # the job
   #
-  def self.fetch_similars
+  def self.fetch_similar_artists
     Artist.need_update_of_similar_artists.each do |artist|
       sims = LastFm::Artist.get_similar(artist.name)
-      artist.update_similars(sims)
+      artist.update_similar_artists(sims)
     end
   end
 
