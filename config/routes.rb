@@ -1,6 +1,10 @@
 Audiogara::Application.routes.draw do
 
-  resources :torrents, :only => [:index, :show]
+  resources :torrents, :only => [:index, :show] do
+    collection do
+      get "all"
+    end
+  end
 
   root :to => "torrents#index"
 

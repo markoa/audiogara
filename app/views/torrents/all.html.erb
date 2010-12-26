@@ -1,0 +1,8 @@
+<h2>All torrents</h2>
+<h3>Event those where we didn't recognize the artist</h3>
+
+<ul>
+  <%= render :partial => "torrent", :collection => @torrents %>
+</ul>
+
+<%= will_paginate @torrents %>
