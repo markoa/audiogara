@@ -26,6 +26,8 @@ class TitleParser
     return {} if album.include?("soundtrack") or album == "ost"
     return {} if album.include?("discography")
     return {} if album.include?("ultimate collection")
+    return {} if album.include?("double cd")
+    return {} if album == "mp3"
 
     { :artist => artist.titleize, :album => album.titleize }
   end

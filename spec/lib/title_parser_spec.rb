@@ -114,4 +114,14 @@ describe TitleParser do
     title.should == {}
   end
 
+  it "skips double cds" do
+    title = TitleParser.parse("80's Wave - Entertainment Weekly Double Cd")
+    title.should == {}
+  end
+
+  it "skips albums titled 'mp3'" do
+    title = TitleParser.parse("Kis Hudh Tak - Mp3")
+    title.should == {}
+  end
+
 end
