@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101226125539) do
+ActiveRecord::Schema.define(:version => 20101226131359) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20101226125539) do
     t.string   "image_mega_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "similars_processed_at"
   end
 
   create_table "similar_artists", :force => true do |t|

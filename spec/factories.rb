@@ -5,6 +5,11 @@ Factory.define(:artist) do |a|
   a.lastfm_url "http://last.fm/music/MGMT"
 end
 
+Factory.define(:similar_artist) do |s|
+  s.name "MGMT"
+  s.score 0.9
+end
+
 Factory.define(:torrent) do |t|
   t.title "MGMT - Congratulations"
   t.sequence(:guid) { |i| "http://thepiratebay.org/torrent/#{i}" }

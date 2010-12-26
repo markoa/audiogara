@@ -2,15 +2,24 @@ require 'spec_helper'
 
 describe Artist do
 
+  it { should have_db_column(:name).of_type(:string) }
+  it { should have_db_column(:mbid).of_type(:string) }
+  it { should have_db_column(:lastfm_url).of_type(:string) }
+  it { should have_db_column(:image_small_url).of_type(:string) }
+  it { should have_db_column(:image_medium_url).of_type(:string) }
+  it { should have_db_column(:image_large_url).of_type(:string) }
+  it { should have_db_column(:image_extralarge_url).of_type(:string) }
+  it { should have_db_column(:image_mega_url).of_type(:string) }
+  it { should have_db_column(:similars_processed_at).of_type(:datetime) }
+
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:lastfm_url) }
 
   it { should have_many(:torrents) }
-
   it { should have_many(:similar_artists) }
 
   describe ".create_from_hash" do
-    
+
     before do
       @hash = {
         :mbid=>"39ab1aed-75e0-4140-bd47-540276886b60",
@@ -40,6 +49,25 @@ describe Artist do
 
     it "doesn't create a new record from an empty hash" do
       expect { Artist.create_from_hash({}) }.to change(Artist, :count).by(0)
+    end
+  end
+
+  describe "#need_update_of_similar_artists" do
+
+    before(:all) do
+      @artist_with_similars = Factory(:artist, :similars_processed_at => 2.days.ago)
+      @artist_with_similars_from_long_ago = Factory(:artist, :similars_processed_at => 1.month.ago)
+      @artist_without_similars = Factory(:artist, :similars_processed_at => nil)
+    end
+
+    it "returns artists with nil processing timestamp" do
+      results = Artist.need_update_of_similar_artists
+      results.should include @artist_without_similars
+      results.should_not include @artist_with_similars
+    end
+
+    it "returns artists with similar artist info fetched more than a month ago" do
+      Artist.need_update_of_similar_artists.should include @artist_with_similars_from_long_ago
     end
   end
 

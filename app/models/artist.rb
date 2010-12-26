@@ -7,6 +7,10 @@ class Artist < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :lastfm_url
 
+  scope :need_update_of_similar_artists, lambda {
+    where(["similars_processed_at is null or similars_processed_at <= ?", 1.month.ago])
+  }
+
   def self.create_from_hash(hash)
     return nil if hash.empty?
 
