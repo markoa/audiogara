@@ -59,8 +59,8 @@ GEM
       daemons (>= 1.0.3)
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
-    mysql2 (0.2.6)
     nokogiri (1.4.4)
+    pg (0.10.0)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -115,8 +115,8 @@ DEPENDENCIES
   database_cleaner
   factory_girl_rails
   mongrel
-  mysql2
   nokogiri
+  pg
   rails (= 3.0.3)
   rspec-rails
   ruby-debug

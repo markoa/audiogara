@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.3'
-gem 'mysql2'
+gem 'pg', :require => 'pg'
 gem 'nokogiri'
 gem 'will_paginate', "~> 3.0.pre2"
 gem 'rufus-scheduler', :require => 'rufus/scheduler'
