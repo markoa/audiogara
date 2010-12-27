@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101226131359) do
+ActiveRecord::Schema.define(:version => 20101227154314) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(:version => 20101226131359) do
     t.datetime "similars_processed_at"
   end
 
+  add_index "artists", ["name"], :name => "index_artists_on_name"
+
   create_table "similar_artists", :force => true do |t|
     t.string   "name"
     t.string   "mbid"
@@ -35,6 +37,8 @@ ActiveRecord::Schema.define(:version => 20101226131359) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "similar_artists", ["name"], :name => "index_similar_artists_on_name"
 
   create_table "torrents", :force => true do |t|
     t.string   "title"
