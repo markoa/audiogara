@@ -48,4 +48,24 @@ describe LastFm do
       sims.last[:name].should == "Coldplay"
     end
   end
+
+  describe "User API" do
+
+    context "top artists" do
+
+      before do
+        File.open(File.join(Rails.root, "spec/xml", "top-artists.xml")) do |f|
+          @top_artists = f.read
+        end
+      end
+
+      it "knows user's top artists" do
+        artists = LastFm::User.get_top_artists("rj", @top_artists)
+        artists.first.should == "Dream Theater"
+        artists.last.should == "Jamiroquai"
+        artists.count.should == 50
+      end
+
+    end
+  end
 end

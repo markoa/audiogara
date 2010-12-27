@@ -55,6 +55,34 @@ module LastFm
     end
   end
 
+  class User
+
+    PERIODS = ["overall", "7day", "3month", "6month", "12month"]
+
+    # Fetches artists that appear in any of the +username+'s top lists,
+    # returns an array of strings.
+    #
+    def self.get_top_artists(username, content = nil)
+
+      base_url = "http://ws.audioscrobbler.com/2.0/?method=user.getTopArtists&user=#{username}"
+      results = []
+
+      PERIODS.each do |period|
+
+        xml_content = (content || LastFm::fetch(base_url + "&period=#{period}"))
+        doc = Nokogiri::XML(xml_content)
+
+        next if doc./("lfm[status=failed]").present?
+
+        doc./("name").each do |node|
+          results << node.text unless results.include?(node.text)
+        end
+      end
+
+      results
+    end
+  end
+
   protected
 
   def self.fetch(path)
