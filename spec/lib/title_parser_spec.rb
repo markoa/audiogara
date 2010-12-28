@@ -37,6 +37,13 @@ describe TitleParser do
     title[:album].should == "Hour Past Paid"
   end
 
+  it "knows 'Gorillaz - The Fall - 2010 (320 kbps MP3)'" do
+    title = TitleParser.parse("Gorillaz - The Fall - 2010 (320 kbps MP3)")
+
+    title[:artist].should == "Gorillaz"
+    title[:album].should == "The Fall"
+  end
+
   it "knows 'Flo Rida - Come With Me (New RnB)~Struzzin~'" do
     title = TitleParser.parse("Flo Rida - Come With Me (New RnB)~Struzzin~")
 
