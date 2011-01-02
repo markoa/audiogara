@@ -1,7 +1,7 @@
 # in alphabetical order
 
 Factory.define(:artist) do |a|
-  a.name "MGMT"
+  a.sequence(:name) { |i| "artist#{i}" }
   a.lastfm_url "http://last.fm/music/MGMT"
 end
 

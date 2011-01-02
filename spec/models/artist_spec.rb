@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Artist do
 
+  before(:all) { Factory(:torrent) }
+
   it { should have_db_column(:name).of_type(:string) }
   it { should have_db_column(:mbid).of_type(:string) }
   it { should have_db_column(:lastfm_url).of_type(:string) }
@@ -12,11 +14,25 @@ describe Artist do
   it { should have_db_column(:image_mega_url).of_type(:string) }
   it { should have_db_column(:similars_processed_at).of_type(:datetime) }
 
+  it { should have_many(:torrents) }
+  it { should have_many(:similar_artists) }
+
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:lastfm_url) }
 
-  it { should have_many(:torrents) }
-  it { should have_many(:similar_artists) }
+  it { should validate_uniqueness_of(:name) }
+
+  describe ".named" do
+
+    before do
+      @mgmt = Factory(:artist, :name => "MGMT")
+      @best_coast = Factory(:artist, :name => "Best Coast")
+    end
+
+    it "does a case-insensitive find by name and returns one Artist" do
+      Artist.named("best coast").should == @best_coast
+    end
+  end
 
   describe ".create_from_hash" do
 

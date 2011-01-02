@@ -11,6 +11,8 @@ class Artist < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :lastfm_url
 
+  validates_uniqueness_of :name
+
   scope :need_update_of_similar_artists, lambda {
     where(["similars_processed_at is null or similars_processed_at <= ?", 1.month.ago])
   }
@@ -18,6 +20,16 @@ class Artist < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 50
 
+  # A shortcut to do a case insensitive find by name.
+  #
+  # Returns an Artist if found, nil if not.
+  #
+  def self.named(name)
+    where(["lower(name) = ?", name.downcase]).first
+  end
+
+  # Creates a new record from a hash as returned by LastFm::Artist.get_info.
+  #
   def self.create_from_hash(hash)
     return nil if hash.empty?
 

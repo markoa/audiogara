@@ -104,6 +104,14 @@ describe Torrent do
                 :artist_id => nil,
                 :artist_processed_at => nil)
 
+      @torrent_with_same_artist_in_lowercase =
+        Factory(:torrent,
+                :title => "ceo - black magic",
+                :artist_name => "Ceo",
+                :album_name => "Black Magic",
+                :artist_id => nil,
+                :artist_processed_at => nil)
+
       @torrent_with_processed_artist =
         Factory(:torrent, :artist_processed_at => 5.minutes.ago)
     end
@@ -117,6 +125,9 @@ describe Torrent do
 
       t.artist_processed_at.should_not be_nil
       t.artist_processed_at.should > 2.seconds.ago
+
+      t2 = @torrent_with_same_artist_in_lowercase.reload
+      t2.artist.should == t.artist
 
       @torrent_with_processed_artist.reload.artist_processed_at.should <= 5.minutes.ago
     end
