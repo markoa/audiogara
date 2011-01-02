@@ -1,6 +1,6 @@
 <h2><%= @torrent.title %></h2>
 
-<div class="torrentDetails">
+<div id="torrentArtistAlbum">
   <p>
     Artist: 
     <% if @torrent.artist.present? -%>
@@ -10,15 +10,6 @@
     <% end -%>
     album: <%= @torrent.album_name.titleize %>
   </p>
-
-  <p>
-    Published <%= time_ago_in_words(@torrent.published_at) %>,
-    fetched <%= time_ago_in_words(@torrent.created_at) %> ago.
-  </p>
-
-  <p>
-    <%= link_to "permalink", @torrent %> |
-    <%= link_to "source", @torrent.guid %> |
-    <%= link_to "download", @torrent.link %>
-  </p>
 </div>
+
+<%= render :partial => "details", :object => @torrent %>
