@@ -15,3 +15,7 @@ group :development, :test do
   gem 'autotest'
   gem 'database_cleaner'
 end
+
+group :production do
+  gem "exception_notification", :git => "git://github.com/rails/exception_notification", :require => 'exception_notifier'
+end

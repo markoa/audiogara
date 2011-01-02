@@ -46,4 +46,10 @@ Audiogara::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # Middleware
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[Audiogara exception] ",
+    :sender_address => %{"Notifier" <notifier@example.com>},
+    :exception_recipients => [ENV["AUDIOGARA_EXCEPTION_RECIPIENT"]]
 end
