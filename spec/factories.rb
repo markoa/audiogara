@@ -5,6 +5,12 @@ Factory.define(:artist) do |a|
   a.lastfm_url "http://last.fm/music/MGMT"
 end
 
+Factory.define(:interest) do |i|
+  i.association :user
+  i.score 1
+  i.sequence(:artist_name) { |i| "artist#{i}" }
+end
+
 Factory.define(:similar_artist) do |s|
   s.name "MGMT"
   s.score 0.9
