@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-  has_many :interests
+  has_many :interests, :dependent => :destroy
 
   validates_presence_of :lastfm_username
 
