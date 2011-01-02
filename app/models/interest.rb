@@ -7,4 +7,8 @@ class Interest < ActiveRecord::Base
 
   validates_uniqueness_of :artist_name, :scope => :user_id
 
+  scope :waiting_for_artist, lambda { |artist_name|
+    where(["lower(artist_name) = ? and artist_id is null", artist_name.downcase])
+  }
+
 end

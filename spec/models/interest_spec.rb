@@ -24,4 +24,20 @@ describe Interest do
     i2.should_not be_valid
     i2.should have(1).error_on(:artist_name)
   end
+
+  describe "#waiting_for_artist" do
+
+    before(:each) do
+      @best_coast_interest_1 = Factory(:interest, :artist_name => "Best Coast")
+      @best_coast_interest_2 = Factory(:interest, :artist_name => "Best Coast")
+      @mgmt_interest = Factory(:interest, :artist_name => "MGMT")
+    end
+
+    it "returns Interests that have artist_name same as given input and with nil artist_id" do
+      results = Interest.waiting_for_artist("Best Coast")
+      results.should have(2).items
+      results.should include(@best_coast_interest_1)
+      results.should include(@best_coast_interest_2)
+    end
+  end
 end
