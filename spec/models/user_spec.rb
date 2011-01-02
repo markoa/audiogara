@@ -14,7 +14,7 @@ describe User do
       @user = Factory(:user)
     end
 
-    context "when working with artist names from listening history" do
+    context "working with artist names from listening history" do
 
       context "when there is a known artist" do
 
@@ -70,7 +70,7 @@ describe User do
       end
     end
 
-    context "when working with similar artist data" do
+    context "working with raw similar artist data" do
 
       before(:each) do
         @similar_artists_data = 
@@ -92,7 +92,7 @@ describe User do
           @user.reload
           @user.interests.should have(3).items
 
-          interest_in_vw = @user.interests.where(:artist_name => "Vampire Weekend").first
+          interest_in_vw = @user.interests.find_by_artist_name("Vampire Weekend")
           interest_in_vw.score.should == 1
           interest_in_vw.artist.should be_nil
 
@@ -118,9 +118,61 @@ describe User do
           @user.reload
           @user.interests.should have(3).items
 
-          interest_in_klaxons = @user.interests.where(:artist_name => "Klaxons").first
+          interest_in_klaxons = @user.interests.find_by_artist_name("Klaxons")
           interest_in_klaxons.artist.should == @klaxons
           interest_in_klaxons.score.should == 0.654495
+        end
+      end
+    end
+
+    context "working with SimilarArtists of a known parent Artist" do
+
+      before(:each) do
+        @mgmt = Factory(:artist)
+      end
+
+      context "when SimilarArtist is a known Artist" do
+
+        before(:each) do
+          @vw = Factory(:artist, :name => "Vampire Weekend")
+
+          @similar = Factory(:similar_artist,
+                             :name => "Vampire Weekend",
+                             :score => 1,
+                             :parent_artist => @mgmt,
+                             :artist => @vw)
+        end
+
+        it "creates an Interests connected to that Artist" do
+          @user.create_interests([@similar])
+
+          @user.reload
+          @user.interests.should have(1).item
+
+          interest_in_vw = @user.interests.find_by_artist_name("Vampire Weekend")
+          interest_in_vw.artist.should == @vw
+          interest_in_vw.score.should == 1
+        end
+      end
+
+      context "when SimilarArtist is an unknown Artist" do
+
+        before(:each) do
+          @similar = Factory(:similar_artist,
+                             :name => "Klaxons",
+                             :score => 0.65,
+                             :parent_artist => @mgmt)
+        end
+
+        it "creates an Interests with just artist_name" do
+          @user.create_interests([@similar])
+
+          @user.reload
+          @user.interests.should have(1).item
+
+          interest_in_klaxons = @user.interests.find_by_artist_name("Klaxons")
+          interest_in_klaxons.artist.should be_nil
+          interest_in_klaxons.score.should == 0.65
         end
       end
     end

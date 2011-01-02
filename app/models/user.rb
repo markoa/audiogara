@@ -19,6 +19,9 @@ class User < ActiveRecord::Base
       elsif item.is_a? Hash
         name = item[:name]
         score = item[:score].to_f
+      elsif item.is_a? SimilarArtist
+        name = item.name
+        score = item.score
       end
 
       next if self.interests.exists?(:artist_name => name)
