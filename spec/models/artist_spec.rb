@@ -22,6 +22,33 @@ describe Artist do
 
   it { should validate_uniqueness_of(:name) }
 
+  describe "updating Interests with nil artist_id" do
+
+    before(:each) do
+      @best_coast_interest = Factory(:interest, :artist_name => "Best Coast")
+
+      @mgmt = Factory(:artist, :name => "MGMT")
+      @mgmt_interest = Factory(:interest, :artist_name => "MGMT", :artist => @mgmt)
+
+      @other_interest = Factory(:interest)
+    end
+
+    it "updates all Interests that were waiting for it to appear in the database" do
+      best_coast = Factory(:artist, :name => "Best Coast")
+
+      @best_coast_interest.reload
+      @best_coast_interest.artist.should == best_coast
+    end
+
+    it "does not touch unrelated Interests" do
+      @mgmt_interest.reload
+      @other_interest.reload
+
+      @mgmt_interest.artist.should == @mgmt
+      @other_interest.artist.should be_nil
+    end
+  end
+
   describe ".named" do
 
     before do

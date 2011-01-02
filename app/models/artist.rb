@@ -43,6 +43,12 @@ class Artist < ActiveRecord::Base
            :image_mega_url => hash[:image_mega])
   end
 
+  def after_create
+    Interest.waiting_for_artist(self.name).find_each do |interest|
+      interest.update_attribute(:artist_id, self.id)
+    end
+  end
+
   # +sims+ is an array of hashes as returned by LastFm::Artist.get_similar.
   #
   def update_similar_artists(sims)
