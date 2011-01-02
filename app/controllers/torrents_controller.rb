@@ -17,4 +17,8 @@ class TorrentsController < ApplicationController
       :order => "created_at DESC"
     )
   end
+
+  def show
+    @torrent = Torrent.find(params[:id])
+  end
 end

@@ -15,8 +15,9 @@
     </p>
 
     <p>
-      <%= link_to("source", torrent.guid) %> |
-      <%= link_to("torrent", torrent.link) %>
+      <%= link_to "permalink", torrent %> |
+      <%= link_to "source", torrent.guid %> |
+      <%= link_to "download", torrent.link %>
     </p>
   </div>
 </li>
