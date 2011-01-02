@@ -16,10 +16,12 @@ describe Interest do
 
   it "should require case sensitive unique value for artist_name within the scope of a user" do
     user = Factory(:user)
-    i = Factory(:interest, :user => user)
 
-    expect {
-      i2 = Factory(:interest, :user => user, :artist_name => i.artist_name)
-    }.to raise_error(ActiveRecord::RecordInvalid)
+    i = Factory.create(:interest, :user => user)
+    i.should be_valid
+
+    i2 = Factory.build(:interest, :user => user, :artist_name => i.artist_name)
+    i2.should_not be_valid
+    i2.should have(1).error_on(:artist_name)
   end
 end
