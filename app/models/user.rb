@@ -4,24 +4,30 @@ class User < ActiveRecord::Base
 
   validates_presence_of :lastfm_username
 
-  # Creates Interests based on names of artists from the listening history;
-  # those will have a score of 1.
+  # Param: either a string array of artist names, or an array of hashes with
+  # keys :score and :name. The former assumes score 1 and is intended to be
+  # used with artist names from the listening history; the latter with artist
+  # names and scores as returned by LastFm::Artist.get_similar.
   #
-  # Param: a string array of artist names.
-  #
-  def create_top_interests(artist_names)
+  def create_interests(artists)
 
-    artist_names.each do |name|
+    artists.each do |item|
+
+      if item.is_a? String
+        name = item
+        score = 1
+      elsif item.is_a? Hash
+        name = item[:name]
+        score = item[:score].to_f
+      end
 
       next if self.interests.exists?(:artist_name => name)
 
-      interest = self.interests.build(
-        :score => 1,
+      self.interests.create(
+        :score => score,
         :artist_name => name,
         :artist => Artist.named(name)
       )
-
-      interest.save!
     end
   end
 

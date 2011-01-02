@@ -33,6 +33,8 @@ module LastFm
     #
     # pass +content+ in test env to avoid API call
     #
+    # Returns an array of hashes with keys: :score, :mbid, :name.
+    #
     def self.get_similar(artist, content = nil)
       content ||= LastFm::fetch("http://ws.audioscrobbler.com/2.0/artist/#{LastFm::escape(artist)}/similar.txt")
       res = []
