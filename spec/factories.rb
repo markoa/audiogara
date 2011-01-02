@@ -19,3 +19,7 @@ Factory.define(:torrent) do |t|
   t.album_name "Congratulations"
   t.association :artist
 end
+
+Factory.define(:user) do |u|
+  u.sequence(:lastfm_username) { |i| "user#{i}" }
+end

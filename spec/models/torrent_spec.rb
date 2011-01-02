@@ -80,7 +80,6 @@ describe Torrent do
   describe ".process_artists" do
 
     before(:each) do
-      DatabaseCleaner.clean
 
       @last_fm_artist_fetcher = double("LastFm::Artist")
       @last_fm_artist_fetcher.stub(:get_info).and_return(
