@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110102173103) do
+ActiveRecord::Schema.define(:version => 20110102205630) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(:version => 20110102173103) do
     t.integer  "artist_id"
     t.float    "score"
     t.string   "artist_name"
-    t.datetime "artist_processed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
