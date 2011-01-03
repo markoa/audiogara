@@ -1,3 +1,5 @@
+require 'last_fm'
+
 class User < ActiveRecord::Base
 
   has_many :interests, :dependent => :destroy
@@ -28,13 +30,29 @@ class User < ActiveRecord::Base
         score = item.score
       end
 
-      next if self.interests.exists?(:artist_name => name)
+      next if self.interests.exists?(:artist_name => name) or name.blank?
 
       self.interests.create(
         :score => score,
         :artist_name => name,
         :artist => Artist.named(name)
       )
+    end
+  end
+
+  def build_profile
+    top_artists = LastFm::User.get_top_artists(self.lastfm_username)
+    create_interests(top_artists)
+
+    top_artists.each do |name|
+      artist = Artist.named(name)
+      if artist.present?
+        similar_artists = artist.similar_artists
+      else
+        similar_artists = LastFm::Artist.get_similar(name)
+      end
+
+      create_interests(similar_artists)
     end
   end
 
