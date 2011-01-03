@@ -11,4 +11,6 @@ class Interest < ActiveRecord::Base
     where(["lower(artist_name) = ? and artist_id is null", artist_name.downcase])
   }
 
+  scope :known, where("artist_id is not null")
+
 end

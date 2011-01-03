@@ -8,7 +8,6 @@ describe Interest do
   it { should belong_to :artist }
   it { should have_db_column(:score).of_type(:float) }
   it { should have_db_column(:artist_name).of_type(:string) }
-  it { should have_db_column(:artist_processed_at).of_type(:datetime) }
   
   it { should validate_presence_of :user_id }
   it { should validate_presence_of :score }
@@ -38,6 +37,19 @@ describe Interest do
       results.should have(2).items
       results.should include(@best_coast_interest_1)
       results.should include(@best_coast_interest_2)
+    end
+  end
+
+  describe "#known" do
+    before(:each) do
+      @best_coast_interest = Factory(:interest, :artist_name => "Best Coast")
+      @mgmt_interest = Factory(:interest, :artist_name => "MGMT", :artist => Factory(:artist))
+    end
+
+    it "returns Interests with a non-nil artist_id" do
+      results = Interest.known
+      results.should_not include(@best_coast_interest)
+      results.should include(@mgmt_interest)
     end
   end
 end
