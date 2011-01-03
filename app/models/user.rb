@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :interests, :dependent => :destroy
 
   validates_presence_of :lastfm_username
+  validates_uniqueness_of :lastfm_username
 
   def to_param
     self.lastfm_username
