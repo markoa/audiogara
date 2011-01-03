@@ -19,27 +19,10 @@ describe UsersController do
       User.stub(:new).and_return(user)
     end
 
-    it "creates a new user" do
-      User.should_receive(:new).
-        with("lastfm_username" => "rj").
-        and_return(user)
-      post :create, :user => { :lastfm_username => "rj" }
-    end
-
-    context "when the user saves successfully" do
+    context "when username exists" do
 
       before do
-        user.stub(:save).and_return(true)
-      end
-
-      it "builds the user profile" do
-        user.should_receive(:build_profile)
-        post :create
-      end
-
-      it "sets a flash[:notice] message" do
-        post :create
-        flash[:notice].should == "Welcome aboard!"
+        User.stub(:find_by_lastfm_username).and_return(user)
       end
 
       it "redirects to the user profile" do
@@ -49,21 +32,51 @@ describe UsersController do
       end
     end
 
-    context "when the user fails to save" do
+    context "when username does not exist" do
 
       before do
-        user.stub(:save).and_return(false)
+        User.stub(:find_by_lastfm_username).and_return(nil)
       end
 
-      it "assigns @user" do
-        post :create
-        assigns[:user].should == user
+      context "when the user saves successfully" do
+
+        before do
+          user.stub(:save).and_return(true)
+        end
+
+        it "builds the user profile" do
+          user.should_receive(:build_profile)
+          post :create
+        end
+
+        it "sets a flash[:notice] message" do
+          post :create
+          flash[:notice].should == "Welcome aboard!"
+        end
+
+        it "redirects to the user profile" do
+          user.stub(:lastfm_username).and_return("rj")
+          post :create
+          response.should redirect_to(:action => "show", :lastfm_username => "rj")
+        end
       end
 
-      it "renders the new template" do
-        user.stub(:save).and_return(false)
-        post :create
-        response.should render_template("new")
+      context "when the user fails to save" do
+
+        before do
+          user.stub(:save).and_return(false)
+        end
+
+        it "assigns @user" do
+          post :create
+          assigns[:user].should == user
+        end
+
+        it "renders the new template" do
+          user.stub(:save).and_return(false)
+          post :create
+          response.should render_template("new")
+        end
       end
     end
   end

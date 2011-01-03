@@ -5,14 +5,20 @@ class UsersController < ApplicationController
   end
 
   def create
+    @user = User.find_by_lastfm_username(params[:user][:lastfm_username]) unless params[:user].nil?
+
+    if @user.present?
+      redirect_to(:action => "show", :lastfm_username => @user.lastfm_username) and return
+    end
+
     @user = User.new(params[:user])
 
     if @user.save
       @user.build_profile
       flash[:notice] = "Welcome aboard!"
-      redirect_to :action => "show", :lastfm_username => @user.lastfm_username
+      redirect_to(:action => "show", :lastfm_username => @user.lastfm_username)
     else
-      render :action => "new"
+      render(:action => "new")
     end
   end
 
