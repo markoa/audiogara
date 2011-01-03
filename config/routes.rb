@@ -14,7 +14,7 @@ Audiogara::Application.routes.draw do
 
   match "/:lastfm_username" => "users#show"
 
-  root :to => "torrents#index"
+  root :to => "users#new"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
