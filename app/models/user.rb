@@ -56,4 +56,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def interesting_torrents
+    aids = self.interests.known.collect { |i| i.artist_id }
+    artists = Artist.find(aids)
+    torrents = []
+    artists.each do |a|
+      torrents = torrents + a.torrents
+    end
+    torrents
+  end
+
 end

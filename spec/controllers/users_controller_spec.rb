@@ -72,7 +72,7 @@ describe UsersController do
 
     context "when user exists" do
 
-      let(:interest) { mock_model(Interest).as_null_object }
+      let(:torrent) { mock_model(Torrent).as_null_object }
 
       before do
         User.should_receive(:find_by_lastfm_username).and_return(user)
@@ -83,11 +83,11 @@ describe UsersController do
         assigns[:user].should be user
       end
 
-      it "loads known interests" do
-        known_interests = [interest]
-        user.stub_chain(:interests, :known).and_return(known_interests)
+      it "loads interesting torrents" do
+        torrents = [torrent]
+        user.should_receive(:interesting_torrents).and_return(torrents)
         get :show, :lastfm_username => "rj"
-        assigns[:known_interests].should == known_interests
+        assigns[:interesting_torrents].should == torrents
       end
     end
 

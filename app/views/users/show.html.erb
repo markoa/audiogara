@@ -1,0 +1,7 @@
+<h2>Hi <%= @user.lastfm_username %>!</h2>
+
+<p>Here's what we recommend:</p>
+
+<ul id="recommendedTorrents">
+  <%= render :partial => "torrents/torrent", :collection => @interesting_torrents %>
+</ul>

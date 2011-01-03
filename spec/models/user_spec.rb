@@ -177,4 +177,23 @@ describe User do
       end
     end
   end
+
+  describe "#interesting_torrents" do
+
+    before(:each) do
+      @user = Factory(:user)
+      @mgmt = Factory(:artist, :name => "MGMT")
+      @mgmt_torrent = Factory(:torrent, :artist => @mgmt)
+      users_interest = Factory(:interest, :user => @user, :artist => @mgmt)
+
+      @faithless = Factory(:artist, :name => "Faithless")
+      @faithless_torrent = Factory(:torrent, :artist => @faithless)
+      other_interest = Factory(:interest, :artist => @faithless)
+    end
+
+    it "returns torrents that match user's interests" do
+      @user.interesting_torrents.should include(@mgmt_torrent)
+      @user.interesting_torrents.should_not include(@faithless_torrent)
+    end
+  end
 end
