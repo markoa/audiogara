@@ -32,14 +32,20 @@ describe UsersController do
         user.stub(:save).and_return(true)
       end
 
+      it "builds the user profile" do
+        user.should_receive(:build_profile)
+        post :create
+      end
+
       it "sets a flash[:notice] message" do
         post :create
         flash[:notice].should == "Welcome aboard!"
       end
 
       it "redirects to the user profile" do
+        user.stub(:lastfm_username).and_return("rj")
         post :create
-        response.should redirect_to(assigns[:user])
+        response.should redirect_to(:action => "show", :lastfm_username => "rj")
       end
     end
 

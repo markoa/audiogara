@@ -8,8 +8,9 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if @user.save
+      @user.build_profile
       flash[:notice] = "Welcome aboard!"
-      redirect_to @user
+      redirect_to :action => "show", :lastfm_username => @user.lastfm_username
     else
       render :action => "new"
     end
