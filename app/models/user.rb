@@ -4,10 +4,14 @@ class User < ActiveRecord::Base
 
   validates_presence_of :lastfm_username
 
-  # Param: either a string array of artist names, or an array of hashes with
-  # keys :score and :name. The former assumes score 1 and is intended to be
-  # used with artist names from the listening history; the latter with artist
-  # names and scores as returned by LastFm::Artist.get_similar.
+  def to_param
+    self.lastfm_username
+  end
+
+  # +artists+: either a string array of artist names, or an array of hashes
+  # with keys :score and :name. The former assumes score 1 and is intended
+  # to be used with artist names from the listening history; the latter
+  # with artist names and scores as returned by LastFm::Artist.get_similar.
   #
   def create_interests(artists)
 

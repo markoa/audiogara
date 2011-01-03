@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by_lastfm_username(params[:lastfm_username])
+    raise ActiveRecord::RecordNotFound if @user.nil?
   end
 end

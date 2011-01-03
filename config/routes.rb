@@ -10,7 +10,9 @@ Audiogara::Application.routes.draw do
     end
   end
 
-  resources :users
+  match "/:lastfm_username" => "users#show"
+
+  resources :users, :except => :show
 
   root :to => "torrents#index"
 

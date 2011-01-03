@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe UsersController do
 
+  let(:user) { mock_model(User).as_null_object }
+
   describe "POST create" do
 
-    let(:user) { mock_model(User).as_null_object }
-    
     before(:each) do
       User.stub(:new).and_return(user)
     end
@@ -49,6 +49,34 @@ describe UsersController do
         user.stub(:save).and_return(false)
         post :create
         response.should render_template("new")
+      end
+    end
+  end
+
+  describe "GET show" do
+
+    context "when user exists" do
+
+      before do
+        User.should_receive(:find_by_lastfm_username).and_return(user)
+      end
+
+      it "finds her by lastfm_username" do
+        get :show, :lastfm_username => "rj"
+        assigns[:user].should be user
+      end
+    end
+
+    context "when user does not exist" do
+
+      before do
+        User.should_receive(:find_by_lastfm_username).and_return(nil)
+      end
+
+      it "shows the not found page" do
+        expect {
+          get :show, :lastfm_username => "rj"
+        }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
   end
