@@ -4,6 +4,15 @@ describe UsersController do
 
   let(:user) { mock_model(User).as_null_object }
 
+  describe "GET new" do
+
+    it "prepares a new user" do
+      User.should_receive(:new).and_return(user)
+      get :new
+      assigns[:user].should == user
+    end
+  end
+
   describe "POST create" do
 
     before(:each) do

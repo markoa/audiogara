@@ -14,6 +14,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'autotest'
   gem 'database_cleaner'
+  gem 'webrat', '>= 0.7.2'
 end
 
 group :production do

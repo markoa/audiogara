@@ -1,0 +1,45 @@
+<%= content_for :head do %>
+  <script>
+    $(document).ready(function() {
+      $("#pleaseWait").hide();
+
+      $("#ticker").ticker({
+        cursorList:  " ",
+        rate:        10,
+        delay:       4000
+      }).trigger("play").trigger("stop");
+
+      $("#ticker")
+      .trigger({
+        type: "control",
+        cursor: jQuery("#ticker").data("ticker").cursor.css({width: "4em", background: "red", position: "relative", top: "1em", left: "-1em"})
+      })
+
+      $("#new_user").submit(function() {
+        $("#pleaseWait").fadeIn();
+        $("#ticker").trigger("play");
+        return true;
+      });
+    });
+  </script>
+<% end %>
+
+<%= form_for @user do |f| -%>
+  <%= f.label :lasfm_username, "Enter your Last.fm username:" %>
+  <%= f.text_field :lastfm_username %>
+
+  <%= f.submit "Show me" %>
+<% end -%>
+
+<div id="pleaseWait">
+  <h2>This takes some time, please bear with us for a few moments</h2>
+
+  <div id="ticker">
+    <div>Compressing higher frequencies...</div>
+    <div>Reticulating splines...</div>
+    <div>Sharding graphs...</div>
+    <div>Detecting impedance...</div>
+    <div>Expanding dynamic range...</div>
+    <div>Loading waveforms...</div>
+  </div>
+</div>

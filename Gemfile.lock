@@ -111,6 +111,10 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
+    webrat (0.7.3)
+      nokogiri (>= 1.2.0)
+      rack (>= 1.0)
+      rack-test (>= 0.5.3)
     will_paginate (3.0.pre2)
 
 PLATFORMS
@@ -129,4 +133,5 @@ DEPENDENCIES
   ruby-debug
   rufus-scheduler
   shoulda
+  webrat (>= 0.7.2)
   will_paginate (~> 3.0.pre2)
