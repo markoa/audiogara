@@ -13,6 +13,8 @@ class Artist < ActiveRecord::Base
 
   validates_uniqueness_of :name
 
+  after_create :assign_to_waiting_interests
+
   scope :need_update_of_similar_artists, lambda {
     where(["similars_processed_at is null or similars_processed_at <= ?", 1.month.ago])
   }
@@ -43,7 +45,7 @@ class Artist < ActiveRecord::Base
            :image_mega_url => hash[:image_mega])
   end
 
-  def after_create
+  def assign_to_waiting_interests
     Interest.waiting_for_artist(self.name).find_each do |interest|
       interest.update_attribute(:artist_id, self.id)
     end

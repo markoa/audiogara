@@ -22,7 +22,7 @@ describe Artist do
 
   it { should validate_uniqueness_of(:name) }
 
-  describe "updating Interests with nil artist_id" do
+  describe ".after_create" do
 
     before(:each) do
       @best_coast_interest = Factory(:interest, :artist_name => "Best Coast")
