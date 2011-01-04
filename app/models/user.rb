@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   validates_presence_of :lastfm_username
   validates_uniqueness_of :lastfm_username
 
+  MIN_SIMILARITY = 0.43
+
   def to_param
     self.lastfm_username
   end
@@ -18,26 +20,39 @@ class User < ActiveRecord::Base
   #
   def create_interests(artists)
 
-    artists.each do |item|
+    names = codes = names_and_scores = []
+    item = artists.first
 
-      if item.is_a? String
-        name = item
-        score = 1
-      elsif item.is_a? Hash
-        name = item[:name]
-        score = item[:score].to_f
-      elsif item.is_a? SimilarArtist
-        name = item.name
-        score = item.score
+    if item.is_a? String
+      names_and_scores = artists.map { |a| [a, 1] }
+
+    elsif item.is_a? Hash
+      names_and_scores = artists.select { |a| a[:score].to_f >= MIN_SIMILARITY }.map { |a| [ a[:name], a[:score].to_f ] }
+
+    elsif item.is_a? SimilarArtist
+      names_and_scores = artists.select { |a| a.score >= MIN_SIMILARITY }.map { |a| [a.name, a.score] }
+    end
+
+    names = names_and_scores.map { |ns| ns.first }
+    codes = names.map { |name| Artist.codify(name) }
+
+    artists = Artist.where(:code => codes).select("id, code")
+    interests = self.interests.where(:artist_name => names).select("artist_name")
+
+    Interest.transaction do
+      names_and_scores.each_with_index do |item, i|
+        name = item.first
+        next if interests.select { |interest| interest.artist_name == name }.present? or name.blank?
+
+        score = item.second
+        artist = artists.select { |a| a.code == codes[i] }.first
+
+        self.interests.create(
+          :score => score,
+          :artist_name => name,
+          :artist => artist
+        )
       end
-
-      next if self.interests.exists?(:artist_name => name) or name.blank?
-
-      self.interests.create(
-        :score => score,
-        :artist_name => name,
-        :artist => Artist.named(name)
-      )
     end
   end
 
@@ -45,16 +60,32 @@ class User < ActiveRecord::Base
     top_artists = LastFm::User.get_top_artists(self.lastfm_username)
     create_interests(top_artists)
 
+    top_artist_names = top_artists.map { |a| a.downcase }
+
+    artists = Artist.where(["lower(\"artists\".\"name\") in (?)", top_artist_names]).
+      select("id, name").
+      includes(:similar_artists)
+
+    similars_from_net = []
+    similars_from_db = []
+
     top_artists.each do |name|
-      artist = Artist.named(name)
+      artist = artists.select { |a| a.name == name }.first
       if artist.present?
         similar_artists = artist.similar_artists
       else
         similar_artists = LastFm::Artist.get_similar(name)
       end
 
-      create_interests(similar_artists)
+      if similar_artists.first.is_a?(Hash)
+        similars_from_net = similars_from_net + similar_artists
+      elsif similar_artists.first.is_a?(SimilarArtist)
+        similars_from_db = similars_from_db + similar_artists
+      end
     end
+
+    create_interests(similars_from_net)
+    create_interests(similars_from_db)
   end
 
   def interesting_torrents

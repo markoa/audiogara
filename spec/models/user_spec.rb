@@ -80,11 +80,22 @@ describe User do
           [
             { :score => 1, :mbid => "af37c51c-0790-4a29-b995-456f98a6b8c9", :name => "Vampire Weekend" },
             { :score => 0.654495, :mbid => "63011a8d-0117-4f7e-9991-1ef1f337ff70", :name => "Klaxons" },
-            { :score => 0.586866, :mbid => "f181961b-20f7-459e-89de-920ef03c7ed0", :name => "The Strokes" }
+            { :score => 0.586866, :mbid => "f181961b-20f7-459e-89de-920ef03c7ed0", :name => "The Strokes" },
+            { :score => 0.0735582, :mbid => "cc197bad-dc9c-440d-a5b5-d52ba2e14234", :name => "Coldplay" }
           ]
       end
 
       context "when they're all unknown" do
+
+        it "includes artists with similarity 0.43 or higher" do
+          lambda {
+            @user.create_interests(@similar_artists_data)
+          }.should_not change(Artist, :count)
+
+          @user.reload
+          @user.interests.should have(3).items
+          @user.interests.find_by_artist_name("Coldplay").should be_nil
+        end
 
         it "creates new Interests with corresponding artist_names and scores" do
 
