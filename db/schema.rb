@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110102205630) do
+ActiveRecord::Schema.define(:version => 20110104172647) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20110102205630) do
     t.datetime "updated_at"
   end
 
-  add_index "interests", ["user_id"], :name => "index_interests_on_user_id"
+  add_index "interests", ["user_id", "artist_name"], :name => "index_interests_on_user_id_and_artist_name"
 
   create_table "similar_artists", :force => true do |t|
     t.string   "name"
