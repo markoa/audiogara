@@ -5,6 +5,7 @@ describe Artist do
   before(:all) { Factory(:torrent) }
 
   it { should have_db_column(:name).of_type(:string) }
+  it { should have_db_column(:code).of_type(:string) }
   it { should have_db_column(:mbid).of_type(:string) }
   it { should have_db_column(:lastfm_url).of_type(:string) }
   it { should have_db_column(:image_small_url).of_type(:string) }
@@ -21,6 +22,32 @@ describe Artist do
   it { should validate_presence_of(:lastfm_url) }
 
   it { should validate_uniqueness_of(:name) }
+
+  describe ".codify" do
+    it "creates a unique lowercase string of a name" do
+      Artist.codify("AC/DC").should == "ac/dc"
+    end
+  end
+
+  describe "#codename" do
+    it "finds artist with given code" do
+      acdc = Factory(:artist, :name => "AC/DC")
+      Artist.codename("ac/dc").should == acdc
+    end
+  end
+
+  describe ".before_create" do
+
+    before(:each) do
+      @best_coast = Factory(:artist, :name => "Best Coast")
+      @mgmt = Factory(:artist, :name => "MGMT")
+    end
+
+    it "generates the code from the name" do
+      @mgmt.code.should == "mgmt"
+      @best_coast.code.should == "bestcoast"
+    end
+  end
 
   describe ".after_create" do
 
@@ -56,8 +83,8 @@ describe Artist do
       @best_coast = Factory(:artist, :name => "Best Coast")
     end
 
-    it "does a case-insensitive find by name and returns one Artist" do
-      Artist.named("best coast").should == @best_coast
+    it "does a case-insensitive find by name" do
+      Artist.named("best coast").should == [@best_coast]
     end
   end
 

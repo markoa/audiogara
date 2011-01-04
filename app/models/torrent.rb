@@ -34,7 +34,7 @@ class Torrent < ActiveRecord::Base
 
     with_unprocessed_artist.each do |torrent|
 
-      artist = Artist.named(torrent.artist_name)
+      artist = Artist.named(torrent.artist_name).first
 
       if artist.nil?
         hash = fetcher.get_info(torrent.artist_name)

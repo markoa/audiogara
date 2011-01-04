@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110104172647) do
+ActiveRecord::Schema.define(:version => 20110104181123) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -24,8 +24,10 @@ ActiveRecord::Schema.define(:version => 20110104172647) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "similars_processed_at"
+    t.string   "code"
   end
 
+  add_index "artists", ["code"], :name => "index_artists_on_code"
   add_index "artists", ["name"], :name => "index_artists_on_name"
 
   create_table "interests", :force => true do |t|

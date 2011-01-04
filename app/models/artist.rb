@@ -13,6 +13,8 @@ class Artist < ActiveRecord::Base
 
   validates_uniqueness_of :name
 
+  before_validation :generate_code, :on => :create
+
   after_create :assign_to_waiting_interests
 
   scope :need_update_of_similar_artists, lambda {
@@ -24,10 +26,16 @@ class Artist < ActiveRecord::Base
 
   # A shortcut to do a case insensitive find by name.
   #
-  # Returns an Artist if found, nil if not.
+  # Returns an array of Artists if found.
   #
   def self.named(name)
-    where(["lower(name) = ?", name.downcase]).first
+    where(["lower(name) = ?", name.downcase])
+  end
+
+  # Returns an Artist if found, nil if not.
+  #
+  def self.codename(code)
+    where(:code => code).first
   end
 
   # Creates a new record from a hash as returned by LastFm::Artist.get_info.
@@ -81,6 +89,15 @@ class Artist < ActiveRecord::Base
       sims = LastFm::Artist.get_similar(artist.name)
       artist.update_similar_artists(sims)
     end
+  end
+
+  def self.codify(name)
+    return nil if name.nil?
+    name.downcase.gsub(/\s/, '')
+  end
+
+  def generate_code
+    self.code = Artist.codify(self.name)
   end
 
 end
