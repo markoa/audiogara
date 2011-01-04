@@ -88,7 +88,13 @@ module LastFm
   protected
 
   def self.fetch(path)
-    Net::HTTP.get(URI.parse("#{path}&api_key=#{API_KEY}"))
+    begin
+      path = URI.parse("#{path}&api_key=#{API_KEY}")
+      Net::HTTP.get(path)
+    rescue EOFError
+      puts "EOFError while GET-ing '#{path}'"
+      ""
+    end
   end
 
   def self.escape(data)
