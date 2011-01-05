@@ -15,19 +15,22 @@ describe UsersController do
 
   describe "POST create" do
 
-    before(:each) do
-      User.stub(:new).and_return(user)
-    end
-
     context "when username exists" do
 
-      before do
+      before(:each) do
+        user.stub(:present?).and_return(true)
+        user.stub(:lastfm_username).and_return("rj")
         User.stub(:find_by_lastfm_username).and_return(user)
       end
 
+      it "rebuilds the user profile" do
+        user.should_receive(:build_profile)
+        post :create, :user => {} # necessary because of the 'unless' in controller
+      end
+
       it "redirects to the user profile" do
-        user.stub(:lastfm_username).and_return("rj")
-        post :create
+        user.stub(:build_profile)
+        post :create, :user => {}
         response.should redirect_to(:action => "show", :lastfm_username => "rj")
       end
     end
@@ -36,6 +39,7 @@ describe UsersController do
 
       before do
         User.stub(:find_by_lastfm_username).and_return(nil)
+        User.stub(:new).and_return(user)
       end
 
       context "when the user saves successfully" do

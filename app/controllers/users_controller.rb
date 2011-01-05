@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     @user = User.find_by_lastfm_username(params[:user][:lastfm_username]) unless params[:user].nil?
 
     if @user.present?
+      @user.build_profile
       redirect_to(:action => "show", :lastfm_username => @user.lastfm_username) and return
     end
 
