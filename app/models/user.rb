@@ -90,12 +90,7 @@ class User < ActiveRecord::Base
 
   def interesting_torrents
     aids = self.interests.known.collect { |i| i.artist_id }
-    artists = Artist.find(aids)
-    torrents = []
-    artists.each do |a|
-      torrents = torrents + a.torrents
-    end
-    torrents
+    Torrent.where(:artist_id => aids).includes(:artist).order("created_at DESC")
   end
 
 end
