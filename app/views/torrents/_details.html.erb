@@ -2,12 +2,11 @@
 
 <div class="torrentDetails">
   <p>
-    Published <%= time_ago_in_words(torrent.published_at) %>,
-    fetched <%= time_ago_in_words(torrent.created_at) %> ago.
-  </p>
-
-  <p>
-    <%= link_to "permalink", torrent %> |
+    <% if torrent.created_at <= 2.days.ago -%>
+      <%= link_to(torrent.published_at.to_date.to_s(:short), torrent) %> |
+    <% else -%>
+      <%= link_to(time_ago_in_words(torrent.created_at) + " ago", torrent) %> |
+    <% end -%>
     <%= link_to "source", torrent.guid %> |
     <%= link_to "download", torrent.link %>
   </p>
