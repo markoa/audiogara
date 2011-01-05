@@ -24,6 +24,8 @@
   </script>
 <% end %>
 
+<h1>Audiogara recommends you music torrents based on your taste</h1>
+
 <%= form_for @user do |f| -%>
   <%= f.label :lasfm_username, "Enter your Last.fm username:" %>
   <%= f.text_field :lastfm_username %>
@@ -32,7 +34,7 @@
 <% end -%>
 
 <div id="pleaseWait">
-  <h2>This takes some time, please bear with us for a few moments</h2>
+  <h2>Please wait, this may take a minute or two</h2>
 
   <div id="ticker">
     <div>Compressing higher frequencies...</div>

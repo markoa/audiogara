@@ -21,15 +21,6 @@
   <%= yield :head %>
 </head>
 <body>
-
-  <nav>
-    <ul>
-      <li><%= link_to 'Torrents', torrents_path %></li>
-      <li><%= link_to 'Artists', artists_path %></li>
-    </ul>
-  </nav>
-
-<%= yield %>
-
+  <%= yield %>
 </body>
 </html>
