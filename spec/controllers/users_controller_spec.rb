@@ -6,10 +6,27 @@ describe UsersController do
 
   describe "GET new" do
 
-    it "prepares a new user" do
-      User.should_receive(:new).and_return(user)
-      get :new
-      assigns[:user].should == user
+    context "when user is logged in" do
+
+      it "redirects to the profile page" do
+        @request.cookies[:lastfm_username] = "rj"
+        get :new
+        response.should redirect_to(:action => "show", :lastfm_username => "rj")
+      end
+    end
+
+    context "when user is not logged in" do
+
+      it "shows the form" do
+        get :new
+        response.should render_template("users/new")
+      end
+
+      it "prepares a new user" do
+        User.should_receive(:new).and_return(user)
+        get :new
+        assigns[:user].should == user
+      end
     end
   end
 
@@ -33,6 +50,12 @@ describe UsersController do
         post :create, :user => {}
         response.should redirect_to(:action => "show", :lastfm_username => "rj")
       end
+
+      it "sets the cookie to remember her and log her in" do
+        user.stub(:build_profile)
+        post :create, :user => {}
+        cookies["lastfm_username"].should == "rj"
+      end
     end
 
     context "when username does not exist" do
@@ -46,6 +69,7 @@ describe UsersController do
 
         before do
           user.stub(:save).and_return(true)
+          user.stub(:lastfm_username).and_return("rj")
         end
 
         it "builds the user profile" do
@@ -59,9 +83,13 @@ describe UsersController do
         end
 
         it "redirects to the user profile" do
-          user.stub(:lastfm_username).and_return("rj")
           post :create
           response.should redirect_to(:action => "show", :lastfm_username => "rj")
+        end
+
+        it "sets the cookie to remember her and log her in" do
+          post :create
+          cookies["lastfm_username"].should == "rj"
         end
       end
 
@@ -122,4 +150,41 @@ describe UsersController do
     end
   end
 
+  describe "POST signout" do
+
+    before(:each) do
+      User.should_receive(:find_by_lastfm_username).and_return(user)
+      user.stub(:lastfm_username).and_return("rj")
+    end
+
+    context "when user has a cookie" do
+
+      before(:each) do
+        @request.cookies[:lastfm_username] = "rj"
+      end
+
+      it "clears the user's cookie" do
+        post :signout, :id => "rj"
+        cookies["lastfm_username"].should be_nil
+      end
+
+      it "redirects to the home page" do
+        post :signout, :id => "rj"
+        response.should redirect_to(root_path)
+      end
+    end
+
+    context "when user does not have a cookie" do
+
+      before(:each) do
+        @request.cookies[:lastfm_username] = nil
+      end
+
+      it "redirects to the home page" do
+        post :signout, :id => "rj"
+        response.should redirect_to(root_path)
+      end
+    end
+
+  end
 end

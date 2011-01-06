@@ -1,6 +1,15 @@
 class UsersController < ApplicationController
 
+  include CookieHandler
+
+  before_filter :find_user_by_lastfm_username, :only => [:show, :signout]
+
   def new
+    lastfm_username = get_name_from_cookie
+    if lastfm_username.present?
+      redirect_to(:action => "show", :lastfm_username => lastfm_username) and return
+    end
+
     @user = User.new
   end
 
@@ -9,6 +18,7 @@ class UsersController < ApplicationController
 
     if @user.present?
       @user.build_profile
+      save_name_in_cookie(@user)
       redirect_to(:action => "show", :lastfm_username => @user.lastfm_username) and return
     end
 
@@ -16,6 +26,7 @@ class UsersController < ApplicationController
 
     if @user.save
       @user.build_profile
+      save_name_in_cookie(@user)
       flash[:notice] = "Welcome aboard!"
       redirect_to(:action => "show", :lastfm_username => @user.lastfm_username)
     else
@@ -24,9 +35,19 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find_by_lastfm_username(params[:lastfm_username])
     raise ActiveRecord::RecordNotFound if @user.nil?
-
     @interesting_torrents = @user.interesting_torrents
   end
+
+  def signout
+    clear_name_from_cookie(@user)
+    redirect_to root_path
+  end
+
+  protected
+
+  def find_user_by_lastfm_username
+    @user = User.find_by_lastfm_username(params[:lastfm_username])
+  end
+
 end
