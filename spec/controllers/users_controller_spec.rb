@@ -11,7 +11,7 @@ describe UsersController do
       it "redirects to the profile page" do
         @request.cookies[:lastfm_username] = "rj"
         get :new
-        response.should redirect_to(:action => "show", :lastfm_username => "rj")
+        response.should redirect_to(:action => "show", :id => "rj")
       end
     end
 
@@ -37,6 +37,7 @@ describe UsersController do
       before(:each) do
         user.stub(:present?).and_return(true)
         user.stub(:lastfm_username).and_return("rj")
+        user.stub(:to_param).and_return("rj")
         User.stub(:find_by_lastfm_username).and_return(user)
       end
 
@@ -48,7 +49,7 @@ describe UsersController do
       it "redirects to the user profile" do
         user.stub(:build_profile)
         post :create, :user => {}
-        response.should redirect_to(:action => "show", :lastfm_username => "rj")
+        response.should redirect_to(user)
       end
 
       it "sets the cookie to remember her and log her in" do
@@ -70,6 +71,7 @@ describe UsersController do
         before do
           user.stub(:save).and_return(true)
           user.stub(:lastfm_username).and_return("rj")
+          user.stub(:to_param).and_return("rj")
         end
 
         it "builds the user profile" do
@@ -84,7 +86,7 @@ describe UsersController do
 
         it "redirects to the user profile" do
           post :create
-          response.should redirect_to(:action => "show", :lastfm_username => "rj")
+          response.should redirect_to(user)
         end
 
         it "sets the cookie to remember her and log her in" do
@@ -124,14 +126,14 @@ describe UsersController do
       end
 
       it "finds her by lastfm_username" do
-        get :show, :lastfm_username => "rj"
+        get :show, :id => "rj"
         assigns[:user].should be user
       end
 
       it "loads interesting torrents" do
         torrents = [torrent]
         user.should_receive(:interesting_torrents).and_return(torrents)
-        get :show, :lastfm_username => "rj"
+        get :show, :id => "rj"
         assigns[:interesting_torrents].should == torrents
       end
     end
@@ -144,7 +146,7 @@ describe UsersController do
 
       it "shows the not found page" do
         expect {
-          get :show, :lastfm_username => "rj"
+          get :show, :id => "rj"
         }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end

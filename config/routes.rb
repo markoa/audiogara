@@ -10,13 +10,13 @@ Audiogara::Application.routes.draw do
     end
   end
 
-  resources :users, :except => :show do
+  resources :users do
     member do
       get "signout"
     end
   end
 
-  match "/:lastfm_username" => "users#show"
+  match "/:id" => "users#show"
 
   root :to => "users#new"
 
