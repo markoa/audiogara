@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     @user = User.find_by_lastfm_username(params[:user][:lastfm_username]) unless params[:user].nil?
 
     if @user.present?
-      @user.build_profile
+      @user.rebuild_profile
       save_name_in_cookie(@user)
       redirect_to(@user) and return
     end

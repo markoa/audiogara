@@ -88,6 +88,11 @@ class User < ActiveRecord::Base
     create_interests(similars_from_db)
   end
 
+  def rebuild_profile
+    top_artists = LastFm::User.get_top_artists(self.lastfm_username)
+    create_interests(top_artists)
+  end
+
   def interesting_torrents
     aids = self.interests.known.collect { |i| i.artist_id }
     Torrent.where(:artist_id => aids).includes(:artist).order("created_at DESC")

@@ -210,4 +210,18 @@ describe User do
       @user.interesting_torrents.should_not include(@faithless_torrent)
     end
   end
+
+  describe "#rebuild_profile" do
+
+    before(:each) do
+      @top_artists = ["Johnny Cash", "Bob Dylan"]
+      LastFm::User.stub(:get_top_artists).and_return(@top_artists)
+      @user = Factory(:user)
+    end
+
+    it "calls create_interests for top artists from listening history" do
+      @user.should_receive(:create_interests).once.with(@top_artists)
+      @user.rebuild_profile
+    end
+  end
 end

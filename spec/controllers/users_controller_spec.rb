@@ -38,22 +38,21 @@ describe UsersController do
         user.stub(:present?).and_return(true)
         user.stub(:lastfm_username).and_return("rj")
         user.stub(:to_param).and_return("rj")
+        user.stub(:rebuild_profile)
         User.stub(:find_by_lastfm_username).and_return(user)
       end
 
       it "rebuilds the user profile" do
-        user.should_receive(:build_profile)
+        user.should_receive(:rebuild_profile)
         post :create, :user => {} # necessary because of the 'unless' in controller
       end
 
       it "redirects to the user profile" do
-        user.stub(:build_profile)
         post :create, :user => {}
         response.should redirect_to(user)
       end
 
       it "sets the cookie to remember her and log her in" do
-        user.stub(:build_profile)
         post :create, :user => {}
         cookies["lastfm_username"].should == "rj"
       end
