@@ -4,7 +4,7 @@ module CookieHandler
   end
 
   def clear_name_from_cookie(user)
-    cookies.delete user.lastfm_username.to_sym
+    cookies.delete(:lastfm_username)
   end
 
   def get_name_from_cookie

@@ -1,5 +1,7 @@
 <h2>Hi <%= @user.lastfm_username %>!</h2>
 
+<small>Wanna be somebody else? <%= link_to("Sign out", signout_user_path(@user)) %></small>
+
 <p>Here's what we recommend:</p>
 
 <ul id="recommendedTorrents">
