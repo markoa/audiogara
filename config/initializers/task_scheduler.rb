@@ -9,6 +9,6 @@ scheduler.every "20m"  do
   SimilarArtist.link_with_known_artists
 end
 
-scheduleer.every "1m" do
+scheduler.every "1m" do
   ProfileJob.process_all
 end
