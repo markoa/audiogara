@@ -8,3 +8,7 @@ scheduler.every "20m"  do
   Artist.fetch_similar_artists
   SimilarArtist.link_with_known_artists
 end
+
+scheduleer.every "1m" do
+  ProfileJob.process_all
+end
