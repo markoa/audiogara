@@ -10,6 +10,8 @@ Audiogara::Application.routes.draw do
     end
   end
 
+  match "/users/:id" => redirect { |params| "/#{params[:id]}" }
+
   resources :users do
     member do
       get "signout"
