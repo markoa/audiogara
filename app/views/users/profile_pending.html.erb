@@ -1,0 +1,13 @@
+<% content_for :head do -%>
+<script>
+  setTimeout('document.location=document.location', 180000);
+</script>
+<% end -%>
+
+<h2>Welcome aboard, <%= @user.lastfm_username %>.</h2>
+
+<p>We are now learning about what kinds of music you like.
+This usually takes about two or three minutes.
+Please check this page then.</p>
+
+<p>In fact, it will automatically refresh when it's ready, so you can kick back and relax.</p>

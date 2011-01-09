@@ -73,8 +73,8 @@ describe UsersController do
           user.stub(:to_param).and_return("rj")
         end
 
-        it "builds the user profile" do
-          user.should_receive(:build_profile)
+        it "creates a ProfileJob" do
+          user.should_receive(:create_profile_job)
           post :create
         end
 
@@ -124,16 +124,35 @@ describe UsersController do
         User.should_receive(:find_by_lastfm_username).and_return(user)
       end
 
-      it "finds her by lastfm_username" do
-        get :show, :id => "rj"
-        assigns[:user].should be user
+      context "and has a pending profile" do
+
+        before(:each) do
+          user.should_receive(:profile_pending?).and_return(true)
+        end
+
+        it "renders the profile pending template" do
+          get :show, :id => "rj"
+          response.should render_template("profile_pending")
+        end
       end
 
-      it "loads interesting torrents" do
-        torrents = [torrent]
-        user.should_receive(:interesting_torrents).and_return(torrents)
-        get :show, :id => "rj"
-        assigns[:interesting_torrents].should == torrents
+      context "and has a known profile" do
+
+        before(:each) do
+          user.should_receive(:profile_pending?).and_return(false)
+        end
+
+        it "finds her by lastfm_username" do
+          get :show, :id => "rj"
+          assigns[:user].should be user
+        end
+
+        it "loads interesting torrents" do
+          torrents = [torrent]
+          user.should_receive(:interesting_torrents).and_return(torrents)
+          get :show, :id => "rj"
+          assigns[:interesting_torrents].should == torrents
+        end
       end
     end
 

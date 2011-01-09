@@ -225,4 +225,29 @@ describe User do
       @user.rebuild_profile
     end
   end
+
+  describe "#profile_pending?" do
+
+    before(:each) do
+      @pending_user = Factory(:user)
+      Factory(:profile_job, :user => @pending_user)
+
+      @known_user = Factory(:user)
+      Factory(:profile_job, :user => @known_user, :done_at => 2.days.ago)
+
+      @beta_user_without_job = Factory(:user)
+    end
+
+    it "returns true if user has an unprocessed ProfileJob" do
+      @pending_user.profile_pending?.should be_true
+    end
+
+    it "return false if user has a processed ProfileJob" do
+      @known_user.profile_pending?.should be_false
+    end
+
+    it "returns false if user does not have a ProfileJob at all" do
+      @beta_user_without_job.profile_pending?.should be_false
+    end
+  end
 end

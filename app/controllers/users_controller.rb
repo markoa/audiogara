@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if @user.save
-      @user.build_profile
+      @user.create_profile_job
       self.current_user = @user
       flash[:notice] = "Welcome aboard!"
       redirect_to(@user)
@@ -34,7 +34,12 @@ class UsersController < ApplicationController
 
   def show
     raise ActiveRecord::RecordNotFound if @user.nil?
-    @interesting_torrents = @user.interesting_torrents
+
+    if @user.profile_pending?
+      render :action => "profile_pending"
+    else
+      @interesting_torrents = @user.interesting_torrents
+    end
   end
 
   def signout

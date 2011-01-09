@@ -100,4 +100,8 @@ class User < ActiveRecord::Base
     Torrent.where(:artist_id => aids).includes(:artist).order("created_at DESC")
   end
 
+  def profile_pending?
+    profile_job.present? and not profile_job.done?
+  end
+
 end
