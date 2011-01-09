@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
 
-  include CookieHandler
-
   before_filter :find_user, :only => [:show, :signout]
 
   def new
@@ -18,7 +16,7 @@ class UsersController < ApplicationController
 
     if @user.present?
       @user.rebuild_profile
-      save_name_in_cookie(@user)
+      self.current_user = @user
       redirect_to(@user) and return
     end
 
@@ -26,7 +24,7 @@ class UsersController < ApplicationController
 
     if @user.save
       @user.build_profile
-      save_name_in_cookie(@user)
+      self.current_user = @user
       flash[:notice] = "Welcome aboard!"
       redirect_to(@user)
     else
@@ -40,7 +38,7 @@ class UsersController < ApplicationController
   end
 
   def signout
-    clear_name_from_cookie(@user)
+    log_out(@user)
     redirect_to root_path
   end
 
