@@ -2,7 +2,7 @@ require 'last_fm'
 
 class User < ActiveRecord::Base
 
-  has_one :profile_job
+  has_one :profile_job, :dependent => :destroy
 
   has_many :interests, :dependent => :destroy
 
