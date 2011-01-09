@@ -22,7 +22,10 @@ class User < ActiveRecord::Base
   #
   def create_interests(artists)
 
-    names = codes = names_and_scores = []
+    names = []
+    codes = []
+    names_and_scores = []
+
     item = artists.first
 
     if item.is_a? String
