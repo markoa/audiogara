@@ -11,6 +11,10 @@ Factory.define(:interest) do |i|
   i.sequence(:artist_name) { |i| "artist#{i}" }
 end
 
+Factory.define(:profile_job) do |j|
+  j.association :user
+end
+
 Factory.define(:similar_artist) do |s|
   s.name "MGMT"
   s.score 0.9

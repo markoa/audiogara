@@ -2,6 +2,8 @@ require 'last_fm'
 
 class User < ActiveRecord::Base
 
+  has_one :profile_job
+
   has_many :interests, :dependent => :destroy
 
   validates_presence_of :lastfm_username
