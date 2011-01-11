@@ -15,4 +15,13 @@ namespace :app do
       puts user.lastfm_username
     end
   end
+
+  desc "Lists all users with some stats"
+  task :user_stats => :environment do
+    User.find_each do |user|
+      interest_count = user.interests.count
+      known_interest_count = user.interests.known.count
+      puts "#{user.lastfm_username}\t#{interest_count} interests\t#{known_interest_count} known"
+    end
+  end
 end
