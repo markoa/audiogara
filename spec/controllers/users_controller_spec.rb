@@ -106,7 +106,6 @@ describe UsersController do
         end
 
         it "renders the new template" do
-          user.stub(:save).and_return(false)
           post :create
           response.should render_template("new")
         end
