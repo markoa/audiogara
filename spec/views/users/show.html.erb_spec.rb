@@ -32,6 +32,31 @@ describe "users/show.html.erb" do
       render
       rendered.should contain("Congratulations")
     end
+
+    context "when there are no suggestions" do
+
+      before(:each) do
+        assign("interesting_torrents", [])
+        assign("known_interests_count", 100)
+      end
+
+      it "says sorry" do
+        render
+        rendered.should have_selector("#sorryNoTorrents")
+      end
+
+      context "when there are very few known interests" do
+
+        before(:each) do
+          assign("known_interests_count", 51)
+        end
+
+        it "says we don't know much about you" do
+          render
+          rendered.should have_selector("#dontKnowMuch")
+        end
+      end
+    end
   end
 
   context "user is viewing another profile" do

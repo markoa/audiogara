@@ -152,6 +152,20 @@ describe UsersController do
           get :show, :id => "rj"
           assigns[:interesting_torrents].should == torrents
         end
+
+        context "when there are no suggestions" do
+
+          before(:each) do
+            user.stub(:interesting_torrents).and_return([])
+          end
+
+          it "counts the number of known interests" do
+            counter = double("interest")
+            counter.should_receive(:count)
+            user.stub_chain(:interests, :known).and_return(counter)
+            get :show, :id => "rj"
+          end
+        end
       end
     end
 

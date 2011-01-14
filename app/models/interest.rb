@@ -1,5 +1,7 @@
 class Interest < ActiveRecord::Base
 
+  USEFULNESS_THRESHOLD = 100 # min number of known interests for this app to be useful
+
   belongs_to :user
   belongs_to :artist
 

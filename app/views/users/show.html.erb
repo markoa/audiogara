@@ -4,11 +4,22 @@
   <h2><%= @user.lastfm_username %></h2>
 <% end -%>
 
-<p>Here's what we recommend:</p>
+<% if @interesting_torrents.present? -%>
+  <p>Here's what we recommend:</p>
 
-<ul id="recommendedTorrents">
-  <%= render :partial => "torrents/torrent", :collection => @interesting_torrents %>
-</ul>
+  <ul id="recommendedTorrents">
+    <%= render :partial => "torrents/torrent", :collection => @interesting_torrents %>
+  </ul>
+<% else -%>
+  <p id="sorryNoTorrents">Sorry but we don't have anything to recommend at the
+  moment. But that's also good - we're shielding you from too much choice.
+  Check back in a few days as more torrents get published.</p>
+
+  <% if user_has_too_few_known_interests? -%>
+    <p id="dontKnowMuch">It seems like you Last.fm history is not too long eh?
+    Many new worlds are waiting for you!</p>
+  <% end -%>
+<% end -%>
 
 <% if current_user == @user -%>
   <small>Wanna be somebody else? <%= link_to("Sign out", signout_user_path(@user)) %></small>

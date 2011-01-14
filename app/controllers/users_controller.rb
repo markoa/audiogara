@@ -35,10 +35,11 @@ class UsersController < ApplicationController
   def show
     raise ActiveRecord::RecordNotFound if @user.nil?
 
-    if @user.profile_pending?
-      render :action => "profile_pending"
-    else
-      @interesting_torrents = @user.interesting_torrents
+    render(:action => "profile_pending") and return if @user.profile_pending?
+
+    @interesting_torrents = @user.interesting_torrents
+    if @interesting_torrents.count
+      @known_interests_count = @user.interests.known.count
     end
   end
 
