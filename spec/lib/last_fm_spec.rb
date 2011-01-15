@@ -54,7 +54,7 @@ describe LastFm do
 
   describe "User API" do
 
-    context "top artists" do
+    describe ".get_top_artists" do
 
       before do
         File.open(File.join(Rails.root, "spec/xml", "top-artists.xml")) do |f|
@@ -70,6 +70,58 @@ describe LastFm do
         artists.count.should == 50
       end
 
+    end
+
+    describe ".get_info" do
+
+      context "on success" do
+      
+        before(:each) do
+          File.open(File.join(Rails.root, "spec/xml", "user-info.xml")) do |f|
+            @rj_info = f.read
+          end
+
+          LastFm.stub(:fetch).and_return(@rj_info)
+        end
+
+        it "returns a hash with user info" do
+          rj = LastFm::User.get_info("rj")
+
+          rj.should_not have_key(:error)
+
+          rj[:id].should == "1000002"
+          rj[:name].should == "RJ"
+          rj[:realname].should == "Richard Jones"
+          rj[:url].should == "http://www.last.fm/user/RJ"
+          rj[:image_small].should == "http://userserve-ak.last.fm/serve/34/8270359.jpg"
+          rj[:image_medium].should == "http://userserve-ak.last.fm/serve/64/8270359.jpg"
+          rj[:image_large].should == "http://userserve-ak.last.fm/serve/126/8270359.jpg"
+          rj[:image_extralarge].should == "http://userserve-ak.last.fm/serve/252/8270359.jpg"
+          rj[:country].should == "UK"
+          rj[:age].should == "28"
+          rj[:gender].should == "m"
+          rj[:playcount].should == "57119"
+          rj[:registered].should == "2002-11-20"
+        end
+      end
+
+      context "on error" do
+
+        before(:each) do
+          File.open(File.join(Rails.root, "spec/xml", "user-info-error.xml")) do |f|
+            @error_response = f.read
+          end
+
+          LastFm.stub(:fetch).and_return(@error_response)
+        end
+
+        it "returns a hash with error description" do
+          rj = LastFm::User.get_info("rj")
+
+          rj.should have(1).key
+          rj[:error].should == "No user with that name was found"
+        end
+      end
     end
   end
 end

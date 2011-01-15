@@ -25,6 +25,7 @@ module LastFm
       h[:image_large] = doc./("image[size=large]").first.text
       h[:image_extralarge] = doc./("image[size=extralarge]").first.text
       h[:image_mega] = doc./("image[size=mega]").first.text
+      h.keys.each { |k| h[k].strip! }
       h
     end
 
@@ -59,7 +60,7 @@ module LastFm
 
     PERIODS = ["overall", "7day", "3month", "6month", "12month"]
 
-    # Fetches artists that appear in any of the +username+'s top lists,
+    # Gets artists that appear in any of the +username+'s top lists,
     # returns an array of strings.
     #
     def self.get_top_artists(username)
@@ -80,6 +81,31 @@ module LastFm
       end
 
       results
+    end
+
+    # Gets information about a user profile, returns a hash.
+    #
+    # http://www.last.fm/api/show?service=344
+    #
+    def self.get_info(username)
+      content = LastFm::fetch("http://ws.audioscrobbler.com/2.0/?method=user.getInfo&user=#{username}")
+      doc = Nokogiri::XML(content)
+
+      if doc./("lfm[status=failed]").present?
+        return { :error => doc./("error").text }
+      end
+
+      h = {}
+      ["id", "name", "realname", "url", "country", "age", "gender", "playcount"].each do |key|
+        h[key.to_sym] = doc./(key).first.text.strip
+      end
+
+      h[:image_small] = doc./("image[size=small]").first.text
+      h[:image_medium] = doc./("image[size=medium]").first.text
+      h[:image_large] = doc./("image[size=large]").first.text
+      h[:image_extralarge] = doc./("image[size=extralarge]").first.text
+      h[:registered] = Date.parse(doc./("registered").first.text).to_s
+      h
     end
   end
 
