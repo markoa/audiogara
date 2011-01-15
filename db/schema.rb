@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110109193730) do
+ActiveRecord::Schema.define(:version => 20110115120546) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
@@ -77,6 +77,19 @@ ActiveRecord::Schema.define(:version => 20110109193730) do
     t.string   "lastfm_username"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "lastfm_id"
+    t.string   "name"
+    t.string   "realname"
+    t.string   "url"
+    t.string   "image_small"
+    t.string   "image_medium"
+    t.string   "image_large"
+    t.string   "image_extralarge"
+    t.string   "country"
+    t.integer  "age"
+    t.string   "gender",           :limit => 1
+    t.integer  "playcount"
+    t.date     "registered"
   end
 
   add_index "users", ["lastfm_username"], :name => "index_users_on_lastfm_username"

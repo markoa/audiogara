@@ -107,4 +107,9 @@ class User < ActiveRecord::Base
     profile_job.present? and not profile_job.done?
   end
 
+  def update_profile_from_hash(hash)
+    hash[:lastfm_id] = hash.delete(:id)
+    update_attributes(hash)
+  end
+
 end

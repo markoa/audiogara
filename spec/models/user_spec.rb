@@ -5,6 +5,19 @@ describe User do
   before(:all) { Factory(:user) }
 
   it { should have_db_column(:lastfm_username).of_type(:string) }
+  it { should have_db_column(:lastfm_id).of_type(:integer) }
+  it { should have_db_column(:name).of_type(:string) }
+  it { should have_db_column(:realname).of_type(:string) }
+  it { should have_db_column(:url).of_type(:string) }
+  it { should have_db_column(:image_small).of_type(:string) }
+  it { should have_db_column(:image_medium).of_type(:string) }
+  it { should have_db_column(:image_large).of_type(:string) }
+  it { should have_db_column(:image_extralarge).of_type(:string) }
+  it { should have_db_column(:country).of_type(:string) }
+  it { should have_db_column(:age).of_type(:integer) }
+  it { should have_db_column(:gender).of_type(:string) }
+  it { should have_db_column(:playcount).of_type(:integer) }
+  it { should have_db_column(:registered).of_type(:date) }
   
   it { should have_one :profile_job }
   it { should have_many :interests }
@@ -248,6 +261,46 @@ describe User do
 
     it "returns false if user does not have a ProfileJob at all" do
       @beta_user_without_job.profile_pending?.should be_false
+    end
+  end
+
+  describe "#update_profile_from_hash" do
+
+    before(:each) do
+      @hash = {
+        :id => "1000002",
+        :name => "RJ",
+        :realname => "Richard Jones",
+        :url => "http://www.last.fm/user/RJ",
+        :image_small => "http://userserve-ak.last.fm/serve/34/8270359.jpg",
+        :image_medium => "http://userserve-ak.last.fm/serve/64/8270359.jpg",
+        :image_large => "http://userserve-ak.last.fm/serve/126/8270359.jpg",
+        :image_extralarge => "http://userserve-ak.last.fm/serve/252/8270359.jpg",
+        :country => "UK",
+        :age => "28",
+        :gender => "m",
+        :playcount => "57119",
+        :registered => "2002-11-20"
+      }
+      @user = Factory(:user)
+    end
+
+    it "updates attributes from Last.fm's get_info" do
+      @user.update_profile_from_hash(@hash)
+
+      @user.lastfm_id.should == 1000002
+      @user.name.should == "RJ"
+      @user.realname.should == "Richard Jones"
+      @user.url.should == "http://www.last.fm/user/RJ"
+      @user.image_small.should == "http://userserve-ak.last.fm/serve/34/8270359.jpg"
+      @user.image_medium.should == "http://userserve-ak.last.fm/serve/64/8270359.jpg"
+      @user.image_large.should == "http://userserve-ak.last.fm/serve/126/8270359.jpg"
+      @user.image_extralarge.should == "http://userserve-ak.last.fm/serve/252/8270359.jpg"
+      @user.country.should == "UK"
+      @user.age.should == 28
+      @user.gender.should == "m"
+      @user.playcount.should == 57119
+      @user.registered.to_s.should == "2002-11-20"
     end
   end
 end
