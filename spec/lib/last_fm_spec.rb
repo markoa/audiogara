@@ -20,7 +20,8 @@ describe LastFm do
     end
 
     it "knows artist info" do
-      artist = LastFm::Artist::get_info("The XX", @the_xx)
+      LastFm.stub(:fetch).and_return(@the_xx)
+      artist = LastFm::Artist::get_info("The XX")
       artist[:name].should == "The xx"
       artist[:mbid].should == "123"
       artist[:url].should == "http://www.last.fm/music/The+xx"
@@ -32,12 +33,14 @@ describe LastFm do
     end
 
     it "recognizes error about unknown artist" do
-      artist = LastFm::Artist.get_info("The XX", @bad_artist)
+      LastFm.stub(:fetch).and_return(@bad_artist)
+      artist = LastFm::Artist.get_info("The XX")
       artist.should == {}
     end
 
     it "knows similar artists" do
-      sims = LastFm::Artist.get_similar("MGMT", @similar_to_mgmt)
+      LastFm.stub(:fetch).and_return(@similar_to_mgmt)
+      sims = LastFm::Artist.get_similar("MGMT")
 
       sims.first[:score].should == 1
       sims.first[:mbid].should == "af37c51c-0790-4a29-b995-456f98a6b8c9"
@@ -60,7 +63,8 @@ describe LastFm do
       end
 
       it "knows user's top artists" do
-        artists = LastFm::User.get_top_artists("rj", @top_artists)
+        LastFm.stub(:fetch).and_return(@top_artists)
+        artists = LastFm::User.get_top_artists("rj")
         artists.first.should == "Dream Theater"
         artists.last.should == "Jamiroquai"
         artists.count.should == 50

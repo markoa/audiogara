@@ -9,8 +9,8 @@ module LastFm
     #
     # pass +content+ in test env to avoid API call
     #
-    def self.get_info(artist, content = nil)
-      content ||= LastFm::fetch("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{LastFm::escape(artist)}")
+    def self.get_info(artist)
+      content = LastFm::fetch("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{LastFm::escape(artist)}")
 
       doc = Nokogiri::XML(content)
       h = {}
@@ -31,12 +31,10 @@ module LastFm
     # Fetches similar artists.
     # http://ws.audioscrobbler.com/2.0/artist/MGMT/similar.txt
     #
-    # pass +content+ in test env to avoid API call
-    #
     # Returns an array of hashes with keys: :score, :mbid, :name.
     #
-    def self.get_similar(artist, content = nil)
-      content ||= LastFm::fetch("http://ws.audioscrobbler.com/2.0/artist/#{LastFm::escape(artist)}/similar.txt")
+    def self.get_similar(artist)
+      content = LastFm::fetch("http://ws.audioscrobbler.com/2.0/artist/#{LastFm::escape(artist)}/similar.txt")
       res = []
 
       return res if content.empty?
@@ -64,15 +62,15 @@ module LastFm
     # Fetches artists that appear in any of the +username+'s top lists,
     # returns an array of strings.
     #
-    def self.get_top_artists(username, content = nil)
+    def self.get_top_artists(username)
 
       base_url = "http://ws.audioscrobbler.com/2.0/?method=user.getTopArtists&user=#{username}"
       results = []
 
       PERIODS.each do |period|
 
-        xml_content = (content || LastFm::fetch(base_url + "&period=#{period}"))
-        doc = Nokogiri::XML(xml_content)
+        content = LastFm::fetch(base_url + "&period=#{period}")
+        doc = Nokogiri::XML(content)
 
         next if doc./("lfm[status=failed]").present?
 
