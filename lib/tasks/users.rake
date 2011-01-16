@@ -1,3 +1,5 @@
+require 'last_fm'
+
 namespace :app do    
 
   desc 'Delete user in db, pass USERNAME'
@@ -22,6 +24,18 @@ namespace :app do
       interest_count = user.interests.count
       known_interest_count = user.interests.known.count
       puts "#{user.lastfm_username}\t#{interest_count} interests\t#{known_interest_count} known"
+    end
+  end
+
+  desc "Updates users' last.fm profile info"
+  task :update_user_profiles => :environment do
+    User.find_each do |user|
+      lastfm_hash = LastFm::User.get_info(user.lastfm_username)
+      if lastfm_hash.has_key?(:error)
+        puts "Error while updating user #{user.lastfm_username}: #{lastfm_hash[:error]}."
+        next
+      end
+      user.update_profile_from_hash(lastfm_hash)
     end
   end
 end
