@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   has_many :interests, :dependent => :destroy
 
-  validates_presence_of :lastfm_username
+  validates_presence_of :lastfm_username, :lastfm_id
   validates_uniqueness_of :lastfm_username
 
   MIN_SIMILARITY = 0.43

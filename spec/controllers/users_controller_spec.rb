@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'last_fm'
 
 describe UsersController do
 
@@ -38,39 +39,43 @@ describe UsersController do
         user.stub(:present?).and_return(true)
         user.stub(:lastfm_username).and_return("rj")
         user.stub(:to_param).and_return("rj")
-        user.stub(:rebuild_profile)
         User.stub(:find_by_lastfm_username).and_return(user)
       end
 
       it "rebuilds the user profile" do
         user.should_receive(:rebuild_profile)
-        post :create, :user => {} # necessary because of the 'unless' in controller
+        post :create
       end
 
       it "redirects to the user profile" do
-        post :create, :user => {}
+        post :create
         response.should redirect_to(user)
       end
 
       it "sets the cookie to remember her and log her in" do
-        post :create, :user => {}
+        post :create
         cookies["lastfm_username"].should == "rj"
       end
     end
 
     context "when username does not exist" do
 
-      before do
+      before(:each) do
         User.stub(:find_by_lastfm_username).and_return(nil)
         User.stub(:new).and_return(user)
       end
 
-      context "when the user saves successfully" do
+      context "when last.fm username is verified" do
 
-        before do
-          user.stub(:save).and_return(true)
+        before(:each) do
+          LastFm::User.should_receive(:get_info).and_return({ :lastfm_id => 1000 })
           user.stub(:lastfm_username).and_return("rj")
           user.stub(:to_param).and_return("rj")
+        end
+        
+        it "saves the user with last.fm info" do
+          user.should_receive(:update_profile_from_hash)
+          post :create
         end
 
         it "creates a ProfileJob" do
@@ -78,7 +83,7 @@ describe UsersController do
           post :create
         end
 
-        it "sets a flash[:notice] message" do
+        it "sets a welcoming flash[:notice] message" do
           post :create
           flash[:notice].should == "Welcome aboard!"
         end
@@ -94,20 +99,25 @@ describe UsersController do
         end
       end
 
-      context "when the user fails to save" do
+      context "when last.fm username is invalid" do
 
         before do
-          user.stub(:save).and_return(false)
+          LastFm::User.should_receive(:get_info).and_return({ :error => "Name not found" })
         end
 
-        it "assigns @user" do
+        it "does not attempt to save" do
           post :create
-          assigns[:user].should == user
+          user.should_not_receive(:save)
         end
 
         it "renders the new template" do
           post :create
           response.should render_template("new")
+        end
+
+        it "sets an informing flash[:notice] message" do
+          post :create
+          flash[:notice].should == "Name not found"
         end
       end
     end

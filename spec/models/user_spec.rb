@@ -23,6 +23,7 @@ describe User do
   it { should have_many :interests }
 
   it { should validate_presence_of(:lastfm_username) }
+  it { should validate_presence_of(:lastfm_id) }
   it { should validate_uniqueness_of(:lastfm_username) }
 
   describe "#create_interests" do

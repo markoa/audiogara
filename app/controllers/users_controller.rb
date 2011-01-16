@@ -1,3 +1,5 @@
+require 'last_fm'
+
 class UsersController < ApplicationController
 
   before_filter :find_user, :only => [:show, :signout]
@@ -12,7 +14,8 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.find_by_lastfm_username(params[:user][:lastfm_username]) unless params[:user].nil?
+    lastfm_username = params[:user].present? ? params[:user][:lastfm_username] : nil
+    @user = User.find_by_lastfm_username(lastfm_username)
 
     if @user.present?
       @user.rebuild_profile
@@ -20,15 +23,18 @@ class UsersController < ApplicationController
       redirect_to(@user) and return
     end
 
-    @user = User.new(params[:user])
+    lastfm_hash = LastFm::User.get_info(lastfm_username)
 
-    if @user.save
+    if lastfm_hash.has_key?(:error)
+      flash[:notice] = lastfm_hash[:error]
+      render(:action => "new")
+    else
+      @user = User.new(params[:user])
+      @user.update_profile_from_hash(lastfm_hash)
       @user.create_profile_job
       self.current_user = @user
       flash[:notice] = "Welcome aboard!"
       redirect_to(@user)
-    else
-      render(:action => "new")
     end
   end
 

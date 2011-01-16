@@ -32,4 +32,5 @@ end
 
 Factory.define(:user) do |u|
   u.sequence(:lastfm_username) { |i| "user#{i}" }
+  u.sequence(:lastfm_id) { |i| i }
 end
