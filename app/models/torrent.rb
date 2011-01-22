@@ -18,7 +18,7 @@ class Torrent < ActiveRecord::Base
   SOURCE_TPB = 1
   SOURCE_DEMONOID = 2
 
-  def self.create_from_hash(hash)
+  def self.create_from_hash(hash, source)
     artist_and_album = TitleParser.parse(hash[:title])
     return nil if artist_and_album.empty?
 
@@ -27,7 +27,8 @@ class Torrent < ActiveRecord::Base
            :link => hash[:link],
            :published_at => Time.parse(hash[:published_at]),
            :artist_name => artist_and_album[:artist],
-           :album_name => artist_and_album[:album])
+           :album_name => artist_and_album[:album],
+           :source => source)
   end
 
   # +fetcher+ is used in test env only

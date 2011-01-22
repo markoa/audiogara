@@ -22,7 +22,7 @@ class FeedFetcher
 
     data.each do |item|
       next if Torrent.exists?(:link => item[:link])
-      Torrent.create_from_hash(item)
+      Torrent.create_from_hash(item, Torrent::SOURCE_TPB)
     end
   end
 

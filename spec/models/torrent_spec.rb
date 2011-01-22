@@ -24,7 +24,7 @@ describe Torrent do
         :published_at => "Wed, 17 Nov 2010 08:11:31 +0100"
       }
 
-      expect { Torrent.create_from_hash(hash) }.to change(Torrent, :count).by(1)
+      expect { Torrent.create_from_hash(hash, Torrent::SOURCE_TPB) }.to change(Torrent, :count).by(1)
 
       torrent = Torrent.last
       torrent.title.should == "Dr Dre - Krush"
@@ -33,6 +33,7 @@ describe Torrent do
       torrent.published_at.should == Time.parse("Wed, 17 Nov 2010 08:11:31 +0100")
       torrent.artist_name.should == "Dr Dre"
       torrent.album_name.should == "Krush"
+      torrent.source.should == Torrent::SOURCE_TPB
     end
 
     it "doesn't create a new record if hash is missing valid artist or album info" do
@@ -43,7 +44,7 @@ describe Torrent do
         :published_at => "Wed, 17 Nov 2010 10:11:31 +0100"
       }
 
-      proc { Torrent.create_from_hash(hash) }.should_not change(Torrent, :count)
+      proc { Torrent.create_from_hash(hash, Torrent::SOURCE_TPB) }.should_not change(Torrent, :count)
     end
 
   end
