@@ -19,20 +19,23 @@ class TitleParser
     end
 
     return {} if artist.size == 0 or album.size == 0
-    return {} if ["va", "various artists"].include?(artist)
+    return {} if ["va", "v a", "various artists", "various"].include?(artist)
     return {} if artist.match(/^va\s/)
     return {} if artist.include?("collection")
     return {} if artist.match(/\d\ds hits/)
     return {} if artist.include?("best of")
     return {} if artist.include?("discography")
     return {} if album.include?("discography")
-    return {} if album.include?("soundtrack") or album == "ost"
+    return {} if artist == "o s t" or artist == "ost" or artist.include?("soundtrack") or album.include?("soundtrack") or album == "ost" or album == "o s t"
     return {} if album.include?("ultimate collection")
     return {} if album.include?("definitive collection")
     return {} if album.include?("double cd")
     return {} if album.match(/ipod|ipad|iphone/)
     return {} if album.include?("cd set")
-    return {} if album == "mp3"
+    return {} if artist =~ /mp3/ or album =~ /mp3/
+    return {} if artist =~ /^\d+$/ and artist =~ /^0/
+    return {} if ["techno", "tehno", "trance", "dance"].include?(artist)
+    return {} if artist == "the mix"
 
     { :artist => CGI.unescapeHTML(artist).titleize, :album => CGI.unescapeHTML(album).titleize }
   end
