@@ -24,7 +24,7 @@ describe "users/show.html.erb" do
   
     it "renders a personalized greeting and a link to sign out" do
       render
-      rendered.should contain("Hi rj!")
+      rendered.should contain("Hi rj")
       rendered.should contain("Sign out")
     end
 
