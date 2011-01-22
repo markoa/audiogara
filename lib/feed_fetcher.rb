@@ -6,9 +6,14 @@ require 'feed_parser'
 class FeedFetcher
 
   TPB_MUSIC_FEED = "http://rss.thepiratebay.org/101"
+  DEMONOID_MUSIC_PAGE = "http://www.demonoid.me/files/?category=2"
 
   def self.fetch_tpb
     Net::HTTP.get(URI.parse(TPB_MUSIC_FEED))
+  end
+
+  def self.fetch_demonoid_page
+    Net::HTTP.get(URI.parse(DEMONOID_MUSIC_PAGE))
   end
   
   def self.fetch_and_save_torrents_from_tpb
