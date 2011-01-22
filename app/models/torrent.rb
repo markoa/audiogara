@@ -15,6 +15,9 @@ class Torrent < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 50
 
+  SOURCE_TPB = 1
+  SOURCE_DEMONOID = 2
+
   def self.create_from_hash(hash)
     artist_and_album = TitleParser.parse(hash[:title])
     return nil if artist_and_album.empty?
