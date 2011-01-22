@@ -26,4 +26,14 @@ class FeedFetcher
     end
   end
 
+  def self.fetch_and_save_torrents_from_demonoid
+    content = fetch_demonoid_page
+    data = FeedParser.parse_demonoid_page(content)
+
+    data.each do |item|
+      next if Torrent.exists?(:link => item[:link])
+      Torrent.create_from_hash(item, Torrent::SOURCE_DEMONOID)
+    end
+  end
+
 end
