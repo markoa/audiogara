@@ -51,4 +51,18 @@ class Torrent < ActiveRecord::Base
     end
   end
 
+  def destroy_with_artist
+    if self.artist_id.present? and self.artist.torrents.count == 1
+      self.artist.destroy
+    end
+
+    self.destroy
+  end
+
+  def self.destroy_older_than(timestamp)
+    Torrent.find_each(:conditions => ["created_at <= ?", timestamp]) do |torrent|
+      torrent.destroy_with_artist
+    end
+  end
+
 end

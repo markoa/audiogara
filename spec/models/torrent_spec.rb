@@ -134,4 +134,61 @@ describe Torrent do
 
   end
 
+  describe "#destroy_with_artist" do
+
+    context "when this is the only torrent for the artist" do
+
+      before(:each) do
+        @artist = Factory(:artist)
+        @similar_artist = Factory(:similar_artist, :parent_artist_id => @artist.id)
+        @another_artist = Factory(:artist)
+        @torrent = Factory(:torrent, :artist => @artist)
+      end
+
+      it "destroys self and associated artist" do
+        @torrent.destroy_with_artist
+        Artist.exists?(@artist.id).should be false
+        SimilarArtist.exists?(@similar_artist.id).should be false
+      end
+    end
+
+    context "when there are more torrents for the artist" do
+
+      before(:each) do
+        @artist = Factory(:artist)
+        @torrent = Factory(:torrent, :artist => @artist)
+        Factory(:torrent, :artist => @artist)
+      end
+
+      it "destroys self but not the artist" do
+        @torrent.destroy_with_artist
+        Artist.exists?(@artist.id).should be true
+        @artist.torrents.count.should == 1
+      end
+    end
+  end
+
+  describe ".destroy_older_than" do
+
+    before(:each) do
+      @old_torrent_1 = Factory(:torrent)
+      @old_torrent_1.update_attribute(:created_at, 15.days.ago)
+
+      @old_torrent_2 = Factory(:torrent)
+      @old_torrent_2.update_attribute(:created_at, 14.days.ago)
+
+      @newer_torrent = Factory(:torrent)
+      @newer_torrent.update_attribute(:created_at, 13.days.ago)
+
+      @timestamp = 2.weeks.ago
+    end
+
+    it "destroys torrents older than the given argument" do
+      Torrent.destroy_older_than(@timestamp)
+      Torrent.exists?(@old_torrent_1.id).should be false
+      Torrent.exists?(@old_torrent_2.id).should be false
+      Torrent.exists?(@newer_torrent.id).should be true
+    end
+  end
+
 end
