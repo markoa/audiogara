@@ -65,8 +65,15 @@ class Torrent < ActiveRecord::Base
     end
   end
 
-  def self.destroy_older_than_two_weeks
+  # Destroys torrents older than two weeks and those with an unknown artist.
+  #
+  def self.trim
     Torrent.destroy_older_than(2.weeks.ago)
+
+    # remember to give a chance to the unprocessed
+    Torrent.find_each(:conditions => ["artist_id is null and created_at <= ?", 30.minutes.ago]) do |torrent|
+      torrent.destroy
+    end
   end
 
 end

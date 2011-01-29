@@ -15,5 +15,5 @@ scheduler.every "1m" do
 end
 
 scheduler.every "1d" do
-  Torrent.destroy_older_than_two_weeks
+  Torrent.trim
 end

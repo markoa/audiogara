@@ -191,4 +191,21 @@ describe Torrent do
     end
   end
 
+  describe ".trim" do
+
+    before(:each) do
+      @torrent = Factory(:torrent, :artist_id => nil, :created_at => 1.hour.ago)
+    end
+
+    it "destroys torrents older than two weeks" do
+      Torrent.should_receive(:destroy_older_than) #.with(2.weeks.ago) unfortunately doesn't work
+      Torrent.trim
+    end
+
+    it "destroys torrents with an unknown artist" do
+      Torrent.trim
+      Torrent.exists?(@torrent.id).should be false
+    end
+  end
+
 end
