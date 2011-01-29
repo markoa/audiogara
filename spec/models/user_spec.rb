@@ -320,4 +320,19 @@ describe User do
       @user.registered.to_s.should == "2002-11-20"
     end
   end
+
+  describe "#ignore_artist" do
+
+    before(:each) do
+      @user = Factory(:user)
+      @led_zep_interest = @user.interests.create(:artist_name => "Led Zeppelin", :score => 0.5)
+    end
+
+    it "creates an IgnoredArtist record and destroys existing interest" do
+      @user.ignore_artist("Led Zeppelin")
+
+      Interest.exists?(@led_zep_interest).should be false
+      @user.ignored_artists.last.name.should == "Led Zeppelin"
+    end
+  end
 end

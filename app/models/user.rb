@@ -102,5 +102,11 @@ class User < ActiveRecord::Base
     hash[:lastfm_id] = hash.delete(:id)
     update_attributes(hash)
   end
+
+  def ignore_artist(artist_name)
+    interest = interests.find_by_artist_name(artist_name)
+    interest.destroy if interest.present?
+    ignored_artists.create(:name => artist_name)
+  end
   
 end
