@@ -22,39 +22,27 @@ class User < ActiveRecord::Base
   #
   def create_interests(artists)
 
-    names = []
-    codes = []
-    names_and_scores = []
+    artist_interests = ArtistInterest.factory(artists)
 
-    item = artists.first
+    names = artist_interests.map { |ai| ai.name }
+    codes = artist_interests.map { |ai| ai.code }
 
-    if item.is_a? String
-      names_and_scores = artists.map { |a| [a, 1] }
-
-    elsif item.is_a? Hash
-      names_and_scores = artists.select { |a| a[:score].to_f >= Artist::MIN_SIMILARITY }.map { |a| [ a[:name], a[:score].to_f ] }
-
-    elsif item.is_a? SimilarArtist
-      names_and_scores = artists.select { |a| a.score >= Artist::MIN_SIMILARITY }.map { |a| [a.name, a.score] }
-    end
-
-    names = names_and_scores.map { |ns| ns.first }
-    codes = names.map { |name| Artist.codify(name) }
-
-    artists = Artist.where(:code => codes).select("id, code")
-    interests = self.interests.where(:artist_name => names).select("artist_name")
+    # group these for to reduce the number of queries
+    known_artists = Artist.where(:code => codes).select("id, code")
+    ignored_artists = self.ignored_artists.collect { |ia| ia.artist }.collect { |a| a.name }
+    known_interests = self.interests.where(:artist_name => names).select("artist_name").collect { |i| i.artist_name }
 
     Interest.transaction do
-      names_and_scores.each_with_index do |item, i|
-        name = item.first
-        next if interests.select { |interest| interest.artist_name == name }.present? or name.blank?
+      artist_interests.each do |ai|
+        next if ai.name.blank?
+        next if ignored_artists.include?(ai.name)
+        next if known_interests.include?(ai.name)
 
-        score = item.second
-        artist = artists.select { |a| a.code == codes[i] }.first
+        artist = known_artists.select { |a| a.code == ai.code }.first
 
         self.interests.create(
-          :score => score,
-          :artist_name => name,
+          :score => ai.score,
+          :artist_name => ai.name,
           :artist => artist
         )
       end
@@ -114,5 +102,5 @@ class User < ActiveRecord::Base
     hash[:lastfm_id] = hash.delete(:id)
     update_attributes(hash)
   end
-
+  
 end

@@ -5,6 +5,11 @@ Factory.define(:artist) do |a|
   a.lastfm_url "http://last.fm/music/MGMT"
 end
 
+Factory.define(:ignored_artist) do |ia|
+  ia.association :user
+  ia.association :artist
+end
+
 Factory.define(:interest) do |i|
   i.association :user
   i.score 1

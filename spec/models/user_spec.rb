@@ -206,6 +206,22 @@ describe User do
         end
       end
     end
+
+    context "given an artist which is in user's ignore list" do
+
+      before(:each) do
+        @artist = Factory(:artist, :name => "Led Zeppelin")
+        Factory(:ignored_artist, :user => @user, :artist => @artist)
+      end
+
+      it "doesn't create an Interest for it" do
+        expect {
+          @user.create_interests(["Led Zeppelin", "The Beatles"])
+        }.to change(Interest, :count).by(1)
+
+        @user.interests.last.artist_name.should == "The Beatles"
+      end
+    end
   end
 
   describe "#interesting_torrents" do
