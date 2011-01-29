@@ -16,6 +16,7 @@ class Artist < ActiveRecord::Base
   before_validation :generate_code, :on => :create
 
   after_create :assign_to_waiting_interests
+  before_destroy :unassign_from_interests
 
   scope :need_update_of_similar_artists, lambda {
     where(["similars_processed_at is null or similars_processed_at <= ?", 1.month.ago])
@@ -56,6 +57,12 @@ class Artist < ActiveRecord::Base
   def assign_to_waiting_interests
     Interest.waiting_for_artist(self.name).find_each do |interest|
       interest.update_attribute(:artist_id, self.id)
+    end
+  end
+
+  def unassign_from_interests
+    Interest.where(:artist_id => self.id).find_each do |interest|
+      interest.update_attribute(:artist_id, nil)
     end
   end
 

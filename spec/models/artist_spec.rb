@@ -76,6 +76,23 @@ describe Artist do
     end
   end
 
+  describe ".before_destroy" do
+
+    before(:each) do
+      @artist = Factory(:artist)
+      @interest_1 = Factory(:interest, :artist => @artist)
+      @interest_2 = Factory(:interest, :artist => @artist)
+      @unrelated_interest = Factory(:interest, :artist => Factory(:artist))
+    end
+
+    it "updates related interests' artist_id to nil" do
+      @artist.destroy
+      @interest_1.reload.artist.should be nil
+      @interest_2.reload.artist.should be nil
+      @unrelated_interest.reload.artist.should be_persisted
+    end
+  end
+
   describe ".named" do
 
     before do
