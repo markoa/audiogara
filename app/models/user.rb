@@ -6,10 +6,10 @@ class User < ActiveRecord::Base
 
   has_many :interests, :dependent => :destroy
 
+  has_many :ignored_artists, :dependent => :destroy
+
   validates_presence_of :lastfm_username, :lastfm_id
   validates_uniqueness_of :lastfm_username
-
-  MIN_SIMILARITY = 0.43
 
   def to_param
     self.lastfm_username
@@ -32,10 +32,10 @@ class User < ActiveRecord::Base
       names_and_scores = artists.map { |a| [a, 1] }
 
     elsif item.is_a? Hash
-      names_and_scores = artists.select { |a| a[:score].to_f >= MIN_SIMILARITY }.map { |a| [ a[:name], a[:score].to_f ] }
+      names_and_scores = artists.select { |a| a[:score].to_f >= Artist::MIN_SIMILARITY }.map { |a| [ a[:name], a[:score].to_f ] }
 
     elsif item.is_a? SimilarArtist
-      names_and_scores = artists.select { |a| a.score >= MIN_SIMILARITY }.map { |a| [a.name, a.score] }
+      names_and_scores = artists.select { |a| a.score >= Artist::MIN_SIMILARITY }.map { |a| [a.name, a.score] }
     end
 
     names = names_and_scores.map { |ns| ns.first }

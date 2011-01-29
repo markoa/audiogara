@@ -25,6 +25,8 @@ class Artist < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 50
 
+  MIN_SIMILARITY = 0.43
+
   # A shortcut to do a case insensitive find by name.
   #
   # Returns an array of Artists if found.

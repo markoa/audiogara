@@ -21,6 +21,7 @@ describe User do
   
   it { should have_one :profile_job }
   it { should have_many :interests }
+  it { should have_many :ignored_artists }
 
   it { should validate_presence_of(:lastfm_username) }
   it { should validate_presence_of(:lastfm_id) }
