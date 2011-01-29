@@ -1,7 +1,7 @@
 class CreateIgnoredArtists < ActiveRecord::Migration
   def self.up
     create_table :ignored_artists do |t|
-      t.references :artist
+      t.string :name
       t.references :user
 
       t.timestamps

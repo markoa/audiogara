@@ -7,7 +7,7 @@ end
 
 Factory.define(:ignored_artist) do |ia|
   ia.association :user
-  ia.association :artist
+  ia.sequence(:name) { |i| "artist#{i}" }
 end
 
 Factory.define(:interest) do |i|

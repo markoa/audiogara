@@ -210,8 +210,7 @@ describe User do
     context "given an artist which is in user's ignore list" do
 
       before(:each) do
-        @artist = Factory(:artist, :name => "Led Zeppelin")
-        Factory(:ignored_artist, :user => @user, :artist => @artist)
+        Factory(:ignored_artist, :user => @user, :name => "Led Zeppelin")
       end
 
       it "doesn't create an Interest for it" do

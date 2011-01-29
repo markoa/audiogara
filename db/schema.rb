@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20110129102346) do
   add_index "artists", ["name"], :name => "index_artists_on_name"
 
   create_table "ignored_artists", :force => true do |t|
-    t.integer  "artist_id"
+    t.string   "name"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

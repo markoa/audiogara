@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
 
     # group these for to reduce the number of queries
     known_artists = Artist.where(:code => codes).select("id, code")
-    ignored_artists = self.ignored_artists.collect { |ia| ia.artist }.collect { |a| a.name }
+    ignored_artists = self.ignored_artists.collect { |ia| ia.name }
     known_interests = self.interests.where(:artist_name => names).select("artist_name").collect { |i| i.artist_name }
 
     Interest.transaction do
