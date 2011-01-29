@@ -13,3 +13,7 @@ end
 scheduler.every "1m" do
   ProfileJob.process_all
 end
+
+scheduler.every "1d" do
+  Torrent.destroy_older_than_two_weeks
+end

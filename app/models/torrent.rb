@@ -65,4 +65,8 @@ class Torrent < ActiveRecord::Base
     end
   end
 
+  def self.destroy_older_than_two_weeks
+    Torrent.destroy_older_than(2.weeks.ago)
+  end
+
 end
