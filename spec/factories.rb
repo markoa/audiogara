@@ -5,6 +5,13 @@ Factory.define(:artist) do |a|
   a.lastfm_url "http://last.fm/music/MGMT"
 end
 
+Factory.define(:hidden_release) do |hi|
+  hi.sequence(:artist_name) { |i| "artist#{i}" }
+  hi.sequence(:album_name) { |i| "album#{i}" }
+  hi.reason HiddenRelease::REASON_OWNED
+  hi.association :user
+end
+
 Factory.define(:ignored_artist) do |ia|
   ia.association :user
   ia.sequence(:name) { |i| "artist#{i}" }

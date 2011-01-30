@@ -241,6 +241,18 @@ describe User do
       @user.interesting_torrents.should include(@mgmt_torrent)
       @user.interesting_torrents.should_not include(@faithless_torrent)
     end
+
+    context "when hidden releases are present" do
+
+      before(:each) do
+        @old_mgmt_torrent = Factory(:torrent, :artist => @mgmt, :artist_name => @mgmt.name, :album_name => "Kids")
+        Factory(:hidden_release, :artist_name => @mgmt.name, :album_name => @old_mgmt_torrent.album_name, :user => @user)
+      end
+
+      it "doesn't include torrents of interesting artists but which also match a hidden release" do
+        @user.interesting_torrents.should_not include(@old_mgmt_torrent)
+      end
+    end
   end
 
   describe "#rebuild_profile" do

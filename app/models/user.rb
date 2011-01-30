@@ -90,7 +90,10 @@ class User < ActiveRecord::Base
 
   def interesting_torrents
     aids = self.interests.known.collect { |i| i.artist_id }
-    Torrent.where(:artist_id => aids).includes(:artist).order("created_at DESC")
+    torrents = Torrent.where(:artist_id => aids).includes(:artist).order("created_at DESC")
+
+    hidden = self.hidden_releases
+    torrents.delete_if { |t| hidden.select { |h| h.artist_name == t.artist_name and h.album_name == t.album_name } != [] }
   end
 
   def profile_pending?
