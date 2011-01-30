@@ -336,4 +336,35 @@ describe User do
       @user.ignored_artists.last.name.should == "Led Zeppelin"
     end
   end
+
+  describe "#hide_release" do
+
+    before(:each) do
+      @user = Factory(:user)
+      @owned_torrent = Factory(:torrent, :artist_name => "Fever Ray", :album_name => "s/t")
+      @not_interesting_torrent = Factory(:torrent, :artist_name => "The Beatles", :album_name => "Help")
+    end
+
+    it "records a HiddenRelease for a given Torrent b/c user already got that release" do
+      expect {
+        @user.hide_release(@owned_torrent, HiddenRelease::REASON_OWNED)
+      }.to change(HiddenRelease, :count).by(1)
+
+      hr = @user.hidden_releases.last
+      hr.artist_name.should == "Fever Ray"
+      hr.album_name.should == "s/t"
+      hr.reason.should == HiddenRelease::REASON_OWNED
+    end
+
+    it "records a HiddenRelease for a given Torrent b/c user is not interested in that release" do
+      expect {
+        @user.hide_release(@not_interesting_torrent, HiddenRelease::REASON_NOT_INTERESTED)
+      }.to change(HiddenRelease, :count).by(1)
+
+      hr = @user.hidden_releases.last
+      hr.artist_name.should == "The Beatles"
+      hr.album_name.should == "Help"
+      hr.reason.should == HiddenRelease::REASON_NOT_INTERESTED
+    end
+  end
 end

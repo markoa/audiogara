@@ -110,5 +110,13 @@ class User < ActiveRecord::Base
     interest.destroy if interest.present?
     ignored_artists.create(:name => artist_name)
   end
+
+  def hide_release(torrent, reason)
+    hidden_releases.create(
+      :artist_name => torrent.artist_name,
+      :album_name => torrent.album_name,
+      :reason => reason
+    )
+  end
   
 end
