@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 
   has_many :ignored_artists, :dependent => :destroy
 
+  has_many :hidden_releases, :dependent => :destroy
+
   validates_presence_of :lastfm_username, :lastfm_id
   validates_uniqueness_of :lastfm_username
 
