@@ -18,6 +18,8 @@ Audiogara::Application.routes.draw do
     end
   end
 
+  match "/users/:id/ignore-artist/:artist_id" => "users#ignore_artist"
+
   match "/:id" => "users#show"
 
   root :to => "users#new"

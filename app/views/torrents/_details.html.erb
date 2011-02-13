@@ -8,6 +8,10 @@
       <%= link_to(time_ago_in_words(torrent.created_at) + " ago", torrent) %> |
     <% end -%>
     <%= link_to "source", torrent.guid %> |
-    <%= link_to "download", torrent.link %>
+    <%= link_to "download", torrent.link %> |
+    <%= link_to "hide", "#", :class => "hide" %>
+    <span class="hideCmds">
+      <%= link_to "all by #{torrent.artist_name}", "#", :class => "hideArtist", :"data-artist-id" => torrent.artist.id %>
+    </span>
   </p>
 </div>

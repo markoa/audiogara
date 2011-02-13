@@ -108,10 +108,10 @@ class User < ActiveRecord::Base
     update_attributes(hash)
   end
 
-  def ignore_artist(artist_name)
-    interest = interests.find_by_artist_name(artist_name)
+  def ignore_artist(artist)
+    interest = interests.find_by_artist_id(artist.id)
     interest.destroy if interest.present?
-    ignored_artists.create(:name => artist_name)
+    ignored_artists.create(:name => artist.name)
   end
 
   def hide_release(torrent, reason)

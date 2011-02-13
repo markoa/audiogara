@@ -338,11 +338,12 @@ describe User do
 
     before(:each) do
       @user = Factory(:user)
-      @led_zep_interest = @user.interests.create(:artist_name => "Led Zeppelin", :score => 0.5)
+      @led_zep = Factory(:artist, :name => "Led Zeppelin")
+      @led_zep_interest = @user.interests.create(:artist_name => "Led Zeppelin", :artist => @led_zep, :score => 0.5)
     end
 
     it "creates an IgnoredArtist record and destroys existing interest" do
-      @user.ignore_artist("Led Zeppelin")
+      @user.ignore_artist(@led_zep)
 
       Interest.exists?(@led_zep_interest).should be false
       @user.ignored_artists.last.name.should == "Led Zeppelin"

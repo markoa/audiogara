@@ -2,7 +2,7 @@ require 'last_fm'
 
 class UsersController < ApplicationController
 
-  before_filter :find_user, :only => [:show, :signout]
+  before_filter :find_user, :only => [:show, :signout, :ignore_artist]
 
   def new
     lastfm_username = get_name_from_cookie
@@ -52,6 +52,12 @@ class UsersController < ApplicationController
   def signout
     log_out(@user)
     redirect_to root_path
+  end
+
+  def ignore_artist
+    artist = Artist.find(params[:artist_id])
+    @user.ignore_artist(artist)
+    head 200
   end
 
   protected

@@ -16,7 +16,8 @@
 <head>
   <title>Audiogara</title>
   <%= stylesheet_link_tag "default" %>
-  <!--<%= javascript_include_tag "application", "jquery-1.4.4.min" %>-->
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js" %>
   <%= csrf_meta_tag %>
   <%= yield :head %>
 </head>
