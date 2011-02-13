@@ -8,11 +8,20 @@ Given /^I am logged in as "([^"]*)"$/ do |username|
 end
 
 Given /^I have a recommendation "([^"]*)" \- "([^"]*)"$/ do |artist_name, album_name|
-  artist = Factory(:artist, :name => artist_name)
 
-  @user.interests.create(:artist => artist,
-                         :artist_name => artist_name,
-                         :score => 0.7)
+  tmp = Artist.where(:name => artist_name).first
+  if tmp.present?
+    artist = tmp
+  else
+    artist = Factory(:artist, :name => artist_name)
+  end
+
+  interest = @user.interests.where(:artist_name => artist_name).first
+  if interest.nil?
+    @user.interests.create(:artist => artist,
+                           :artist_name => artist_name,
+                           :score => 0.7)
+  end
 
   Factory(:torrent,
           :artist => artist,

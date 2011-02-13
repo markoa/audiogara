@@ -10,6 +10,7 @@ Feature: managing interests
     And I am logged in as "rj"
     And I have a recommendation "Tim Hecker" - "Adventures in ultraviolet"
     And I have a recommendation "Simple Minds" - "Once upon a time"
+    And I have a recommendation "Simple Minds" - "Sparkle in the rain"
     And I am in
     When I follow "hide"
     And I follow "all by Simple Minds"

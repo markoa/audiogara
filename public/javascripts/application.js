@@ -14,9 +14,9 @@ Audiogara = {
       var link = this;
       $.post("/users/" + userId + "/ignore-artist/" + artistId, function(data, status) {
         if (status === "success") {
-          torrent = $(link).closest(".torrent");
-          torrent.fadeOut();
-          torrent.remove();
+          torrents = $(".torrent[data-artist-id=" + artistId + "]");
+          torrents.fadeOut();
+          torrents.remove();
         } else {
           alert("Yikes, an error occurred.");
         }
