@@ -8,12 +8,9 @@ scheduler.every "20m"  do
   Torrent.process_artists
   Artist.fetch_similar_artists
   SimilarArtist.link_with_known_artists
+  Torrent.trim
 end
 
 scheduler.every "1m" do
   ProfileJob.process_all
-end
-
-scheduler.every "1d" do
-  Torrent.trim
 end
