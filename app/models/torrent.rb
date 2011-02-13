@@ -52,7 +52,7 @@ class Torrent < ActiveRecord::Base
   end
 
   def destroy_with_artist
-    if self.artist_id.present? and self.artist.torrents.count == 1
+    if self.artist_id.present? and self.artist.present? and self.artist.torrents.count == 1
       self.artist.destroy
     end
 
