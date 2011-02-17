@@ -228,6 +228,45 @@ describe UsersController do
         response.should redirect_to(root_path)
       end
     end
-
   end
+
+  describe "POST ignore_artist" do
+
+    before(:each) do
+      User.should_receive(:find_by_lastfm_username).and_return(user)
+      Artist.should_receive(:find).and_return(mock_model(Artist))
+    end
+
+    it "ignores artist" do
+      user.should_receive(:ignore_artist)
+      post :ignore_artist, :id => 1, :artist_id => 10
+    end
+
+    it "returns only the status code of success" do
+      user.stub(:ignore_artist)
+      post :ignore_artist, :id => 1, :artist_id => 10
+      response.should be_success
+    end
+    
+  end
+
+  describe "POST hide_release" do
+    
+    before(:each) do
+      User.should_receive(:find_by_lastfm_username).and_return(user)
+      Torrent.should_receive(:find).and_return(mock_model(Torrent))
+    end
+
+    it "hides release as not interesting" do
+      user.should_receive(:hide_release_as_not_interesting)
+      post :hide_release, :id => 1, :torrent_id => 20
+    end
+
+    it "returns only the status code of success" do
+      user.stub(:hide_release_as_not_interesting)
+      post :hide_release, :id => 1, :torrent_id => 20
+      response.should be_success
+    end
+  end
+
 end

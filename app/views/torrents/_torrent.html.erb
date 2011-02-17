@@ -1,4 +1,4 @@
-<li class="torrent" data-artist-id="<%= torrent.artist.id if torrent.artist.present? %>">
+<li class="torrent" id="torrent_<%= torrent.id %>" data-artist-id="<%= torrent.artist.id if torrent.artist.present? %>">
   <h3>
     <% if torrent.artist.present? -%>
       <%= link_to(torrent.artist.name, torrent.artist) %>

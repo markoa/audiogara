@@ -11,6 +11,7 @@
     <%= link_to "download", torrent.link %> |
     <%= link_to "hide", "#", :class => "hide" %>
     <span class="hideCmds">
+      <%= link_to "this release", "#", :class => "hideTorrent", :"data-torrent-id" => torrent.id %> |
       <%= link_to "all by #{torrent.artist_name}", "#", :class => "hideArtist", :"data-artist-id" => torrent.artist.id %>
     </span>
   </p>
