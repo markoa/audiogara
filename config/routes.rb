@@ -20,9 +20,9 @@ Audiogara::Application.routes.draw do
 
   match "/users/:id/ignore-artist/:artist_id" => "users#ignore_artist", :via => :post
 
-  match "/users/:id/hide-release/:torrent_id" => "users#hide_release", :via => :post
+  match "/users/:id/ignore-album/:torrent_id" => "users#ignore_album", :via => :post
 
-  match "/users/:id/owns-release/:torrent_id" => "users#owns_release", :via => :post
+  match "/users/:id/own-album/:torrent_id" => "users#own_album", :via => :post
 
   match "/:id" => "users#show"
 

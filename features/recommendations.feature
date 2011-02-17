@@ -14,7 +14,7 @@ Feature: managing interests
 
   @javascript
   Scenario: Ignoring an artist
-    When I follow "hide"
+    When I follow "ignore"
     And I follow "all by Simple Minds"
     Then I should not see "Simple Minds"
     When I reload the page
@@ -23,8 +23,8 @@ Feature: managing interests
 
   @javascript
   Scenario: Hiding a release
-    When I follow "hide"
-    And I follow "this release"
+    When I follow "ignore"
+    And I follow "this album"
     Then I should not see "Simple Minds - Sparkle In The Rain"
     But I should see "Simple Minds - Once Upon A Time"
     And I should see "Tim Hecker - Adventures In Ultraviolet"

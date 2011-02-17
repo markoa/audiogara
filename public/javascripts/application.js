@@ -27,7 +27,7 @@ Audiogara = {
     $(".hideTorrent").click(function() {
       var torrentId = $(this).attr("data-torrent-id");
       var link = this;
-      $.post("/users/" + userId + "/hide-release/" + torrentId, function(data, status) {
+      $.post("/users/" + userId + "/ignore-album/" + torrentId, function(data, status) {
         if (status === "success") {
           torrent = $("#torrent_" + torrentId);
           torrent.fadeOut();
@@ -42,7 +42,7 @@ Audiogara = {
     $(".haveThis").click(function() {
       var torrentId = $(this).attr("data-torrent-id");
       var link = this;
-      $.post("/users/" + userId + "/owns-release/" + torrentId, function(data, status) {
+      $.post("/users/" + userId + "/own-album/" + torrentId, function(data, status) {
         if (status === "success") {
           torrent = $("#torrent_" + torrentId);
           torrent.fadeOut();
