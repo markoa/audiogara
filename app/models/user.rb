@@ -121,5 +121,13 @@ class User < ActiveRecord::Base
       :reason => reason
     )
   end
+
+  def hide_release_as_owned(torrent)
+    hide_release(torrent, HiddenRelease::REASON_OWNED)
+  end
+
+  def hide_release_as_not_interesting(torrent)
+    hide_release(torrent, HiddenRelease::REASON_NOT_INTERESTED)
+  end
   
 end

@@ -350,7 +350,7 @@ describe User do
     end
   end
 
-  describe "#hide_release" do
+  describe "hiding releases" do
 
     before(:each) do
       @user = Factory(:user)
@@ -358,26 +358,57 @@ describe User do
       @not_interesting_torrent = Factory(:torrent, :artist_name => "The Beatles", :album_name => "Help")
     end
 
-    it "records a HiddenRelease for a given Torrent b/c user already got that release" do
-      expect {
-        @user.hide_release(@owned_torrent, HiddenRelease::REASON_OWNED)
-      }.to change(HiddenRelease, :count).by(1)
+    describe "#hide_release" do
 
-      hr = @user.hidden_releases.last
-      hr.artist_name.should == "Fever Ray"
-      hr.album_name.should == "s/t"
-      hr.reason.should == HiddenRelease::REASON_OWNED
+      it "records a HiddenRelease for a given Torrent b/c user already got that release" do
+        expect {
+          @user.hide_release(@owned_torrent, HiddenRelease::REASON_OWNED)
+        }.to change(HiddenRelease, :count).by(1)
+
+        hr = @user.hidden_releases.last
+        hr.artist_name.should == "Fever Ray"
+        hr.album_name.should == "s/t"
+        hr.reason.should == HiddenRelease::REASON_OWNED
+      end
+
+      it "records a HiddenRelease for a given Torrent b/c user is not interested in that release" do
+        expect {
+          @user.hide_release(@not_interesting_torrent, HiddenRelease::REASON_NOT_INTERESTED)
+        }.to change(HiddenRelease, :count).by(1)
+
+        hr = @user.hidden_releases.last
+        hr.artist_name.should == "The Beatles"
+        hr.album_name.should == "Help"
+        hr.reason.should == HiddenRelease::REASON_NOT_INTERESTED
+      end
     end
 
-    it "records a HiddenRelease for a given Torrent b/c user is not interested in that release" do
-      expect {
-        @user.hide_release(@not_interesting_torrent, HiddenRelease::REASON_NOT_INTERESTED)
-      }.to change(HiddenRelease, :count).by(1)
+    describe "#hide_release_as_owned" do
 
-      hr = @user.hidden_releases.last
-      hr.artist_name.should == "The Beatles"
-      hr.album_name.should == "Help"
-      hr.reason.should == HiddenRelease::REASON_NOT_INTERESTED
+      it "is a shortcut for hide_release with HiddenRelease::REASON_OWNED" do
+        expect {
+          @user.hide_release_as_owned(@owned_torrent)
+        }.to change(HiddenRelease, :count).by(1)
+
+        hr = @user.hidden_releases.last
+        hr.artist_name.should == "Fever Ray"
+        hr.album_name.should == "s/t"
+        hr.reason.should == HiddenRelease::REASON_OWNED
+      end
+    end
+
+    describe "#hide_release_as_not_interesting" do
+      
+      it "is a shortcut for hide_release with HiddenRelease::REASON_NOT_INTERESTED" do
+        expect {
+          @user.hide_release_as_not_interesting(@not_interesting_torrent)
+        }.to change(HiddenRelease, :count).by(1)
+
+        hr = @user.hidden_releases.last
+        hr.artist_name.should == "The Beatles"
+        hr.album_name.should == "Help"
+        hr.reason.should == HiddenRelease::REASON_NOT_INTERESTED
+      end
     end
   end
 end
