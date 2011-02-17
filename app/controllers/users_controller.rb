@@ -2,7 +2,7 @@ require 'last_fm'
 
 class UsersController < ApplicationController
 
-  before_filter :find_user, :only => [:show, :signout, :ignore_artist, :hide_release]
+  before_filter :find_user, :only => [:show, :signout, :ignore_artist, :hide_release, :owns_release]
 
   def new
     lastfm_username = get_name_from_cookie
@@ -63,6 +63,12 @@ class UsersController < ApplicationController
   def hide_release
     torrent = Torrent.find(params[:torrent_id])
     @user.hide_release_as_not_interesting(torrent)
+    head 200
+  end
+
+  def owns_release
+    torrent = Torrent.find(params[:torrent_id])
+    @user.hide_release_as_owned(torrent)
     head 200
   end
 

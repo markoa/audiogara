@@ -269,4 +269,23 @@ describe UsersController do
     end
   end
 
+  describe "POST owns_release" do
+    
+    before(:each) do
+      User.should_receive(:find_by_lastfm_username).and_return(user)
+      Torrent.should_receive(:find).and_return(mock_model(Torrent))
+    end
+
+    it "hides release as owned" do
+      user.should_receive(:hide_release_as_owned)
+      post :owns_release, :id => 1, :torrent_id => 20
+    end
+
+    it "returns only the status code of success" do
+      user.stub(:hide_release_as_owned)
+      post :hide_release, :id => 1, :torrent_id => 20
+      response.should be_success
+    end
+  end
+
 end

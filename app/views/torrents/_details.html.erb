@@ -9,6 +9,7 @@
     <% end -%>
     <%= link_to "source", torrent.guid %> |
     <%= link_to "download", torrent.link %> |
+    <%= link_to "I have this", "#", :class => "haveThis", :"data-torrent-id" => torrent.id %> |
     <%= link_to "hide", "#", :class => "hide" %>
     <span class="hideCmds">
       <%= link_to "this release", "#", :class => "hideTorrent", :"data-torrent-id" => torrent.id %> |

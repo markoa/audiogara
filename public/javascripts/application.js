@@ -38,5 +38,20 @@ Audiogara = {
       });
       return false;
     });
+
+    $(".haveThis").click(function() {
+      var torrentId = $(this).attr("data-torrent-id");
+      var link = this;
+      $.post("/users/" + userId + "/owns-release/" + torrentId, function(data, status) {
+        if (status === "success") {
+          torrent = $("#torrent_" + torrentId);
+          torrent.fadeOut();
+          torrent.remove();
+        } else {
+          alert("Yikes, an error occurred.");
+        }
+      });
+      return false;
+    });
   }
 };

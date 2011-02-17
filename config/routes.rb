@@ -22,6 +22,8 @@ Audiogara::Application.routes.draw do
 
   match "/users/:id/hide-release/:torrent_id" => "users#hide_release", :via => :post
 
+  match "/users/:id/owns-release/:torrent_id" => "users#owns_release", :via => :post
+
   match "/:id" => "users#show"
 
   root :to => "users#new"

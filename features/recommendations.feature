@@ -32,3 +32,14 @@ Feature: managing interests
     Then I should not see "Simple Minds - Sparkle In The Rain"
     But I should see "Simple Minds - Once Upon A Time"
     And I should see "Tim Hecker - Adventures In Ultraviolet"
+
+  @javascript
+  Scenario: Marking a release as owned
+    When I follow "I have this"
+    Then I should not see "Simple Minds - Sparkle In The Rain"
+    But I should see "Simple Minds - Once Upon A Time"
+    And I should see "Tim Hecker - Adventures In Ultraviolet"
+    When I reload the page
+    Then I should not see "Simple Minds - Sparkle In The Rain"
+    But I should see "Simple Minds - Once Upon A Time"
+    And I should see "Tim Hecker - Adventures In Ultraviolet"
