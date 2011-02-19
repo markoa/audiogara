@@ -43,3 +43,11 @@ Feature: managing interests
     Then I should not see "Simple Minds - Sparkle In The Rain"
     But I should see "Simple Minds - Once Upon A Time"
     And I should see "Tim Hecker - Adventures In Ultraviolet"
+
+  @javascript @new
+  Scenario: Viewing an artist
+    When I follow "Tim Hecker"
+    Then I should see "Adventures In Ultraviolet"
+    And I should see "download"
+    But I should not see "I have this"
+    And I should not see "ignore"

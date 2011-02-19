@@ -8,12 +8,15 @@
       <%= link_to(time_ago_in_words(torrent.created_at) + " ago", torrent) %> |
     <% end -%>
     <%= link_to "source", torrent.guid %> |
-    <%= link_to "download", torrent.link %> |
-    <%= link_to "I have this", "#", :class => "haveThis", :"data-torrent-id" => torrent.id %> |
-    <%= link_to "ignore", "#", :class => "hide" %>
-    <span class="hideCmds">
-      <%= link_to "this album", "#", :class => "hideTorrent", :"data-torrent-id" => torrent.id %> |
-      <%= link_to "all by #{torrent.artist_name}", "#", :class => "hideArtist", :"data-artist-id" => torrent.artist.id %>
-    </span>
+    <%= link_to "download", torrent.link %>
+
+    <% if @user and current_user == @user -%>
+      | <%= link_to "I have this", "#", :class => "haveThis", :"data-torrent-id" => torrent.id %> |
+      <%= link_to "ignore", "#", :class => "hide" %>
+      <span class="hideCmds">
+        <%= link_to "this album", "#", :class => "hideTorrent", :"data-torrent-id" => torrent.id %> |
+        <%= link_to "all by #{torrent.artist_name}", "#", :class => "hideArtist", :"data-artist-id" => torrent.artist.id %>
+      </span>
+    <% end -%>
   </p>
 </div>

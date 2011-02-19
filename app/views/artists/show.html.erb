@@ -1,8 +1,10 @@
 <h2><%= @artist.name %></h2>
 
-<div class="megaImage">
-  <%= image_tag(@artist.image_mega_url) %>
-</div>
+<% if @artist.image_mega_url.present? -%>
+  <div class="megaImage">
+    <%= image_tag(@artist.image_mega_url) %>
+  </div>
+<% end -%>
 
 <h3>Torrents</h3>
 
