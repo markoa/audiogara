@@ -38,4 +38,11 @@ namespace :app do
       user.update_profile_from_hash(lastfm_hash)
     end
   end
+
+  desc "Refreshes all user profiles"
+  task :refresh_user_profiles => :environment do
+    User.find_each do |user|
+      user.refresh_profile
+    end
+  end
 end

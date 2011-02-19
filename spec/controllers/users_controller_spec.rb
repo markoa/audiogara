@@ -42,11 +42,6 @@ describe UsersController do
         User.stub(:find_by_lastfm_username).and_return(user)
       end
 
-      it "rebuilds the user profile" do
-        user.should_receive(:rebuild_profile)
-        post :create
-      end
-
       it "redirects to the user profile" do
         post :create
         response.should redirect_to(user)

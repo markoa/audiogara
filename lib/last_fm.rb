@@ -63,12 +63,13 @@ module LastFm
     # Gets artists that appear in any of the +username+'s top lists,
     # returns an array of strings.
     #
-    def self.get_top_artists(username)
+    def self.get_top_artists(username, options = {})
 
       base_url = "http://ws.audioscrobbler.com/2.0/?method=user.getTopArtists&user=#{username}"
       results = []
+      options[:periods] ||= PERIODS
 
-      PERIODS.each do |period|
+      options[:periods].each do |period|
 
         content = LastFm::fetch(base_url + "&period=#{period}")
         doc = Nokogiri::XML(content)

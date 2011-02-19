@@ -51,8 +51,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def build_profile
-    top_artists = LastFm::User.get_top_artists(self.lastfm_username)
+  def build_profile(periods = nil)
+    top_artists = LastFm::User.get_top_artists(self.lastfm_username, :periods => periods)
     create_interests(top_artists)
 
     top_artist_names = top_artists.map { |a| a.downcase }
@@ -83,9 +83,8 @@ class User < ActiveRecord::Base
     create_interests(similars_from_db)
   end
 
-  def rebuild_profile
-    top_artists = LastFm::User.get_top_artists(self.lastfm_username)
-    create_interests(top_artists)
+  def refresh_profile
+    build_profile(["7day"])
   end
 
   def interesting_torrents

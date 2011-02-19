@@ -18,7 +18,6 @@ class UsersController < ApplicationController
     @user = User.find_by_lastfm_username(lastfm_username)
 
     if @user.present?
-      @user.rebuild_profile
       self.current_user = @user
       redirect_to(@user) and return
     end

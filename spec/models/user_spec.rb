@@ -255,17 +255,18 @@ describe User do
     end
   end
 
-  describe "#rebuild_profile" do
+  describe "#refresh_profile" do
 
     before(:each) do
       @top_artists = ["Johnny Cash", "Bob Dylan"]
+      LastFm::Artist.stub(:get_similar).and_return([])
       LastFm::User.stub(:get_top_artists).and_return(@top_artists)
       @user = Factory(:user)
     end
 
-    it "calls create_interests for top artists from listening history" do
-      @user.should_receive(:create_interests).once.with(@top_artists)
-      @user.rebuild_profile
+    it "calls build_profile for the period of last 7 days only" do
+      @user.should_receive(:build_profile).once.with(["7day"])
+      @user.refresh_profile
     end
   end
 
