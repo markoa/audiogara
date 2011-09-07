@@ -7,7 +7,7 @@ gem 'will_paginate', "~> 3.0.pre2"
 gem 'rufus-scheduler', :require => 'rufus/scheduler'
 
 group :development, :test do
-  gem 'mongrel'
+  gem 'mongrel', ">= 1.2.0.pre2"
   gem 'ruby-debug19'
   gem 'rspec-rails', '>= 2.4.1'
   gem 'shoulda'
