@@ -117,8 +117,6 @@ describe LastFm do
 
         it "returns a hash with error description" do
           rj = LastFm::User.get_info("rj")
-
-          rj.should have(1).key
           rj[:error].should == "No user with that name was found"
         end
       end
