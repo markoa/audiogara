@@ -8,7 +8,7 @@ gem 'rufus-scheduler', :require => 'rufus/scheduler'
 
 group :development, :test do
   gem 'mongrel'
-  gem 'ruby-debug'
+  gem 'ruby-debug19'
   gem 'rspec-rails', '>= 2.4.1'
   gem 'shoulda'
   gem 'factory_girl_rails'
